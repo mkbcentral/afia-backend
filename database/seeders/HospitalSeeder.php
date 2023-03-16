@@ -13,7 +13,7 @@ class HospitalSeeder extends Seeder
      */
     public function run(): void
     {
-        Hospital::cretate([
+        Hospital::create([
             'name'=>'POLYCLINIQUE SHUKRANI',
             'email'=>'ps-shukra@shukra.app',
             'phone'=>'0971330007'

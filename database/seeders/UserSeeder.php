@@ -21,8 +21,9 @@ class UserSeeder extends Seeder
             'name'=>'Admin',
             'email'=>'admin@shukra.app',
             'phone'=>'0971330007',
-            'role'=>$role->id,
-            'name'=>$hospital->id
+            'password'=>'123456',
+            'role_id'=>$role->id,
+            'hospital_id'=>$hospital->id
         ]);
     }
 }
