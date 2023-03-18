@@ -43,10 +43,11 @@ class ApiHospitalController extends Controller
             $inputs['email'] = $request->email;
             $inputs['phone'] = $request->phone;
             $inputs['logo'] = $request->logo;
-            (new HospitalRepository())->create($inputs);
+        $hospital= (new HospitalRepository())->create($inputs);
             $response = [
                 'success' => true,
-                'message' => 'Hospital added successfull'
+                'message' => 'Hospital added successfull',
+                'hospital'=>$hospital
             ];
             return response()->json($response, 200);
         } catch (Exception $ex) {
@@ -75,10 +76,11 @@ class ApiHospitalController extends Controller
         $inputs['name'] = $request->name;
         $inputs['email'] = $request->email;
         $inputs['phone'] = $request->phone;
-        (new HospitalRepository())->update($id, $inputs);
+        $hospital=(new HospitalRepository())->update($id, $inputs);
         $response = [
             'success' => true,
-            'message' => 'Hospital updated successfull'
+            'message' => 'Hospital updated successfull',
+            'hospital'=>$hospital
         ];
         return response()->json($response, 200);
     }

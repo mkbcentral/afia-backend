@@ -7,6 +7,7 @@ use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
@@ -21,7 +22,7 @@ class UserSeeder extends Seeder
             'name'=>'Admin',
             'email'=>'admin@shukra.app',
             'phone'=>'0971330007',
-            'password'=>'123456',
+            'password'=>Hash::make('123456'),
             'role_id'=>$role->id,
             'hospital_id'=>$hospital->id
         ]);
