@@ -24,7 +24,7 @@ class UserRepository
             'hospital_id' => $inputs['hospital_id'],
             'role_id' => $inputs['role_id']
         ]);
-        return new $user;
+        return $user;
     }
     //Show spécific user
     public function show(int $id): User

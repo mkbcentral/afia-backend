@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\BranchResource;
 use App\Http\Resources\HospitalResource;
 use App\Http\Resources\RoleResource;
 use Illuminate\Http\Request;
@@ -27,6 +28,7 @@ class LogingController extends Controller
             $success['name']=$user->email;
             $success['hospital']=new HospitalResource($user->hospital);
             $success['role']=new RoleResource($user->role);
+            $success['branch']=new BranchResource($user->branch);
             $response=[
                 'success'=>true,
                 'data'=>$success,

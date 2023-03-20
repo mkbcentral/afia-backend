@@ -37,10 +37,11 @@ class ApiRoleController extends Controller
         }
         try {
             $inputs['name'] = $request->name;
-            (new RoleRepository())->create($inputs);
+            $role = (new RoleRepository())->create($inputs);
             $response = [
                 'success' => true,
-                'message' => 'Role added successfull'
+                'message' => 'Role added successfull',
+                'role'=>new RoleResource($role)
             ];
             return response()->json($response, 200);
         } catch (Exception $ex) {
@@ -68,10 +69,11 @@ class ApiRoleController extends Controller
     {
         try {
             $inputs['name'] = $request->name;
-            (new RoleRepository())->update($id, $inputs);
+            $role = (new RoleRepository())->update($id, $inputs);
             $response = [
                 'success' => true,
-                'message' => 'Role updated successfull'
+                'message' => 'Role updated successfull',
+                'role'=>new RoleResource($role)
             ];
             return response()->json($response, 200);
         } catch (Exception $ex) {
@@ -85,7 +87,7 @@ class ApiRoleController extends Controller
     public function destroy(int $id)
     {
         $role=$this->show($id);
-        if ($role->users->isEmpty() && $role->status=="ACTIVE") {
+        if ($role->users->isEmpty() && $role->status=="ENABLE") {
             $status=(new RoleRepository())->delete($id);
             $response = [
                 'success' => $status,

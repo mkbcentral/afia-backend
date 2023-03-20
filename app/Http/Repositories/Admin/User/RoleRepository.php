@@ -16,7 +16,7 @@ class RoleRepository{
         $role = Role::create([
             'name' => $inputs['name'],
         ]);
-        return new $role;
+        return $role;
     }
     //Show spécific Role
     public function show(int $id): Role

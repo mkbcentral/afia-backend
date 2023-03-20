@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('logo')->nullable();
             $table->string('email')->nullable()->unique();
             $table->string('phone')->nullable()->unique();
-            $table->enum('status',['ACTIVE','DISABLE'])->default('ACTIVE');
+            $table->enum('status',['ENABLE','DISABLE'])->default('ENABLE');
             $table->timestamps();
         });
     }

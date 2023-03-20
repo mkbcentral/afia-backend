@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Branch;
 use App\Models\Hospital;
 use App\Models\Role;
 use App\Models\User;
@@ -18,13 +19,15 @@ class UserSeeder extends Seeder
     {
         $hospital=Hospital::find(1);
         $role=Role::find(1);
+        $branch=Branch::find(1);
         User::create([
             'name'=>'Admin',
             'email'=>'admin@shukra.app',
             'phone'=>'0971330007',
             'password'=>Hash::make('123456'),
             'role_id'=>$role->id,
-            'hospital_id'=>$hospital->id
+            'hospital_id'=>$hospital->id,
+            'branch_id'=>$branch->id
         ]);
     }
 }

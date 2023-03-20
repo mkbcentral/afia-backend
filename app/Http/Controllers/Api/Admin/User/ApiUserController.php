@@ -46,10 +46,11 @@ class ApiUserController extends Controller
             $inputs['password'] = '123456';
             $inputs['role_id'] = $request->role_id;
             $inputs['hospital_id'] = $request->hospital_id;
-            (new UserRepository())->create($inputs);
+            $user=(new UserRepository())->create($inputs);
             $response = [
                 'success' => true,
-                'message' => 'User added successfull'
+                'message' => 'User added successfull',
+                'user'=>new UserResource($user)
             ];
             return response()->json($response, 200);
         } catch (Exception $ex) {
@@ -81,10 +82,11 @@ class ApiUserController extends Controller
             $inputs['phone'] = $request->phone;
             $inputs['role_id'] = $request->role_id;
             $inputs['hospital_id'] = $request->hospital_id;
-            (new UserRepository())->update($id, $inputs);
+            $user= (new UserRepository())->update($id, $inputs);
             $response = [
                 'success' => true,
-                'message' => 'User updated successfull'
+                'message' => 'User updated successfull',
+                'user'=>new UserResource($user)
             ];
             return response()->json($response, 200);
         } catch (Exception $ex) {
@@ -98,7 +100,7 @@ class ApiUserController extends Controller
     public function destroy(string $id)
     {
         $user=$this->show($id);
-        if ($user->status=="ACTIVE") {
+        if ($user->status=="ENABLE") {
             $response = [
                 'success' => false,
                 'message' => 'Action faild this user take data',

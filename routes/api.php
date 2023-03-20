@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\Admin\Hospital\ApiBranchController;
 use App\Http\Controllers\Api\Admin\Hospital\ApiHospitalController;
 use App\Http\Controllers\Api\Admin\User\ApiRoleController;
 use App\Http\Controllers\Api\Admin\User\ApiUserController;
@@ -26,6 +27,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('role', ApiRoleController::class);
     Route::resource('user', ApiUserController::class);
     Route::resource('hospital', ApiHospitalController::class);
+    Route::resource('branch', ApiBranchController::class);
+    Route::put('/branch/status/{id}', [ApiBranchController::class, 'changeStatus']);
     Route::put('/role/status/{id}', [ApiRoleController::class, 'changeStatus']);
     Route::put('/user/status/{id}', [ApiUserController::class, 'changeStatus']);
     Route::put('/hospital/status/{id}', [ApiHospitalController::class, 'changeStatus']);

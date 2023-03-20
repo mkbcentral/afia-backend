@@ -47,7 +47,7 @@ class ApiHospitalController extends Controller
             $response = [
                 'success' => true,
                 'message' => 'Hospital added successfull',
-                'hospital' => $hospital
+                'hospital' => new HospitalResource($hospital)
             ];
             return response()->json($response, 200);
         } catch (Exception $ex) {
@@ -80,7 +80,7 @@ class ApiHospitalController extends Controller
         $response = [
             'success' => true,
             'message' => 'Hospital updated successfull',
-            'hospital' => $hospital
+            'hospital' => new HospitalResource($hospital)
         ];
         return response()->json($response, 200);
     }
@@ -91,7 +91,7 @@ class ApiHospitalController extends Controller
     public function destroy(int $id)
     {
         $hospital = $this->show($id);
-        if ($hospital->users->isEmpty() && $hospital->status == "ACTIVE") {
+        if ($hospital->users->isEmpty() && $hospital->status == "ENABLE") {
             $response = [
                 'success' => false,
                 'message' => 'Action faild this hosp take data',
@@ -124,7 +124,6 @@ class ApiHospitalController extends Controller
     public function updateLogo($id, Request $request)
     {
         try {
-           //$path= $request->logo->store('image', 'public');
             $response = [
                 'path'=>$request->logo
             ];

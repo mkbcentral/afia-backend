@@ -2,7 +2,6 @@
 
 namespace App\Http\Repositories\Admin\Hospital;
 
-use App\Http\Resources\HospitalResource;
 use App\Models\Hospital;
 
 class HospitalRepository
@@ -22,7 +21,7 @@ class HospitalRepository
             'email' => $inputs['email'],
             'phone' => $inputs['phone']
         ]);
-        return new $hospital;
+        return $hospital;
     }
     //Show spécific user
     public function show(int $id): Hospital

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Branch;
 use App\Models\Hospital;
 use App\Models\Role;
 use Illuminate\Database\Migrations\Migration;
@@ -20,8 +21,9 @@ return new class extends Migration
             $table->string('phone')->unique()->nullable();
             $table->string('password');
             $table->foreignIdFor(Hospital::class)->nullable()->constrained();
+            $table->foreignIdFor(Branch::class)->nullable()->constrained();
             $table->foreignIdFor(Role::class)->nullable()->constrained();
-            $table->enum('status',['ACTIVE','DISABLE'])->default('ACTIVE');
+            $table->enum('status',['ENABLE','DISABLE'])->default('ENABLE');
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
