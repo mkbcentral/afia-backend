@@ -43,11 +43,11 @@ class ApiHospitalController extends Controller
             $inputs['email'] = $request->email;
             $inputs['phone'] = $request->phone;
             $inputs['logo'] = $request->logo;
-        $hospital= (new HospitalRepository())->create($inputs);
+            $hospital = (new HospitalRepository())->create($inputs);
             $response = [
                 'success' => true,
                 'message' => 'Hospital added successfull',
-                'hospital'=>$hospital
+                'hospital' => $hospital
             ];
             return response()->json($response, 200);
         } catch (Exception $ex) {
@@ -76,11 +76,11 @@ class ApiHospitalController extends Controller
         $inputs['name'] = $request->name;
         $inputs['email'] = $request->email;
         $inputs['phone'] = $request->phone;
-        $hospital=(new HospitalRepository())->update($id, $inputs);
+        $hospital = (new HospitalRepository())->update($id, $inputs);
         $response = [
             'success' => true,
             'message' => 'Hospital updated successfull',
-            'hospital'=>$hospital
+            'hospital' => $hospital
         ];
         return response()->json($response, 200);
     }
@@ -88,9 +88,22 @@ class ApiHospitalController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(int $id)
     {
-        //
+        $hospital = $this->show($id);
+        if ($hospital->users->isEmpty() && $hospital->status == "ACTIVE") {
+            $response = [
+                'success' => false,
+                'message' => 'Action faild this hosp take data',
+            ];
+        } else {
+            $status=(new HospitalRepository())->delete($id);
+            $response = [
+                'success' => $status,
+                'message' => 'Hospital deleted successfull',
+            ];
+        }
+        return response()->json($response);
     }
 
     //Chang status
@@ -105,6 +118,23 @@ class ApiHospitalController extends Controller
             return response()->json($response, 200);
         } catch (Exception $ex) {
             return response()->json(['errors' => $ex->getMessage()]);
+        }
+    }
+
+    public function updateLogo($id, Request $request)
+    {
+        try {
+           //$path= $request->logo->store('image', 'public');
+            $response = [
+                'path'=>$request->logo
+            ];
+            return response()->json($response);
+        } catch (Exception $ex) {
+            $response = [
+                'success' => false,
+                'message' =>$ex->getMessage()
+            ];
+            return response()->json($response);
         }
     }
 }

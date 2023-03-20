@@ -82,9 +82,23 @@ class ApiRoleController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(int $id)
     {
-        //
+        $role=$this->show($id);
+        if ($role->users->isEmpty() && $role->status=="ACTIVE") {
+            $status=(new RoleRepository())->delete($id);
+            $response = [
+                'success' => $status,
+                'message' => 'Role deleted successfull',
+            ];
+
+        } else {
+            $response = [
+                'success' => false,
+                'message' => 'Action faild this role take data',
+            ];
+        }
+        return response()->json($response);
     }
     //Chang status
     public function changeStatus(int $id, Request $request)

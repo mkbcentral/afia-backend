@@ -27,6 +27,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('user', ApiUserController::class);
     Route::resource('hospital', ApiHospitalController::class);
     Route::put('/role/status/{id}', [ApiRoleController::class, 'changeStatus']);
-    Route::put('/hospital/status/{id}', [ApiHospitalController::class, 'changeStatus']);
     Route::put('/user/status/{id}', [ApiUserController::class, 'changeStatus']);
+    Route::put('/hospital/status/{id}', [ApiHospitalController::class, 'changeStatus']);
+    Route::put('/hospital/logo/{id}', [ApiHospitalController::class, 'updateLogo']);
 });

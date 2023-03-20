@@ -41,6 +41,14 @@ class HospitalRepository
         $hospital->update();
         return $hospital;
     }
+    //Delete role
+    public function delete(int $id):bool{
+        $hospital= $this->show($id);
+        if ($hospital->delete()) {
+             $status=true;
+        }
+        return $status;
+     }
     // Disable hospital
     public function changeStatus(int $id, string $status): void
     {

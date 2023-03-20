@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\HospitalResource;
+use App\Http\Resources\RoleResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -23,7 +25,8 @@ class LogingController extends Controller
             $user=Auth::user();
             $success['token']=$user->createToken('My token')->plainTextToken;
             $success['name']=$user->email;
-
+            $success['hospital']=new HospitalResource($user->hospital);
+            $success['role']=new RoleResource($user->role);
             $response=[
                 'success'=>true,
                 'data'=>$success,

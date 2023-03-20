@@ -45,6 +45,14 @@ class UserRepository
         $user->update();
         return $user;
     }
+    //Delete
+    public function delete(int $id):bool{
+       $user= $this->show($id);
+       if ($user->delete()) {
+            $status=true;
+       }
+       return $status;
+    }
     // Disable user
     public function changeStatus(int $id, string $status): void
     {

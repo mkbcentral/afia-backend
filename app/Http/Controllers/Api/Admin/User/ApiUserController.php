@@ -97,7 +97,20 @@ class ApiUserController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $user=$this->show($id);
+        if ($user->status=="ACTIVE") {
+            $response = [
+                'success' => false,
+                'message' => 'Action faild this user take data',
+            ];
+        } else {
+            $status=(new UserRepository())->delete($id);
+            $response = [
+                'success' => $status,
+                'message' => 'user$user deleted successfull',
+            ];
+        }
+        return response()->json($response);
     }
 
     //Chang status

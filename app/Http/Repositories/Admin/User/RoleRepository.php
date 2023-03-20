@@ -33,6 +33,14 @@ class RoleRepository{
         $role->update();
         return $role;
     }
+    //Delete role
+    public function delete(int $id):bool{
+        $role= $this->show($id);
+        if ($role->delete()) {
+             $status=true;
+        }
+        return $status;
+     }
     // Disable Role
     public function changeStatus(int $id, string $status): void
     {
