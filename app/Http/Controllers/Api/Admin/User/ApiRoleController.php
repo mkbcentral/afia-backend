@@ -87,7 +87,7 @@ class ApiRoleController extends Controller
     public function destroy(int $id)
     {
         $role=$this->show($id);
-        if ($role->users->isEmpty() && $role->status=="ENABLE") {
+        if ($role->users->isEmpty() && $role->status=="DISABLE") {
             $status=(new RoleRepository())->delete($id);
             $response = [
                 'success' => $status,

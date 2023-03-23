@@ -15,6 +15,7 @@ class BranchResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'id'=>$this->id,
             'name'=>$this->name,
             'status'=>$this->status,
             'hospital'=>new HospitalResource($this->hospital)

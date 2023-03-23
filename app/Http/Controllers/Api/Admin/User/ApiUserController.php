@@ -35,6 +35,7 @@ class ApiUserController extends Controller
             'phone' => 'required|unique:users,phone',
             'role_id' => 'required|numeric',
             'hospital_id' => 'required|numeric',
+            'branch_id' => 'required|numeric',
         ]);
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
@@ -46,6 +47,7 @@ class ApiUserController extends Controller
             $inputs['password'] = '123456';
             $inputs['role_id'] = $request->role_id;
             $inputs['hospital_id'] = $request->hospital_id;
+            $inputs['branch_id'] = $request->branch_id;
             $user=(new UserRepository())->create($inputs);
             $response = [
                 'success' => true,
@@ -81,7 +83,7 @@ class ApiUserController extends Controller
             $inputs['email'] = $request->email;
             $inputs['phone'] = $request->phone;
             $inputs['role_id'] = $request->role_id;
-            $inputs['hospital_id'] = $request->hospital_id;
+
             $user= (new UserRepository())->update($id, $inputs);
             $response = [
                 'success' => true,

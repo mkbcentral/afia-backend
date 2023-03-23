@@ -22,7 +22,8 @@ class UserRepository
             'phone' => $inputs['phone'],
             'password' => Hash::make($inputs['password']),
             'hospital_id' => $inputs['hospital_id'],
-            'role_id' => $inputs['role_id']
+            'role_id' => $inputs['role_id'],
+            'branch_id' => $inputs['branch_id']
         ]);
         return $user;
     }
@@ -41,7 +42,6 @@ class UserRepository
         $user->email = $inputs['email'];
         $user->phone = $inputs['phone'];
         $user->role_id = $inputs['role_id'];
-        $user->hospital_id = $inputs['hospital_id'];
         $user->update();
         return $user;
     }
@@ -54,7 +54,7 @@ class UserRepository
        return $status;
     }
     // Disable user
-    public function changeStatus(int $id, string $status): void
+    public function changeStatus(int $id, $status): void
     {
         $user = $this->show($id);
         $user->status = $status;
