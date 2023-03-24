@@ -32,4 +32,9 @@ class Branch extends Model
     {
         return $this->belongsTo(Hospital::class, 'hospital_id');
     }
+
+    public function formPatients(): HasMany
+    {
+        return $this->hasMany(FormPatient::class);
+    }
 }

@@ -1,7 +1,7 @@
 <?php
 
+use App\Models\AgentService;
 use App\Models\Commune;
-use App\Models\Company;
 use App\Models\FormPatient;
 use App\Models\PatientType;
 use Illuminate\Database\Migrations\Migration;
@@ -25,7 +25,7 @@ return new class extends Migration
             $table->foreignIdFor(Commune::class)->nullable()->constrained();
             $table->string('quartier',255)->nullable();
             $table->string('street',255)->nullable();
-            $table->foreignIdFor(Company::class)->nullable()->constrained();
+            $table->foreignIdFor(AgentService::class)->nullable()->constrained();
             $table->foreignIdFor(PatientType::class)->nullable()->constrained();
             $table->foreignIdFor(FormPatient::class)->nullable()->constrained();
             $table->timestamps();

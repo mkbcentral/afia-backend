@@ -20,4 +20,19 @@ class Hospital extends Model
     {
         return $this->hasMany(User::class);
     }
+
+    public function patientSubscribers(): HasMany
+    {
+        return $this->hasMany(PatientSubscribe::class);
+    }
+
+    public function agentPatients(): HasMany
+    {
+        return $this->hasMany(AgentPatient::class);
+    }
+
+    public function patientPrivates(): HasMany
+    {
+        return $this->hasMany(PatientPrivate::class);
+    }
 }
