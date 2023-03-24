@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Api\Admin\Others;
 
 use App\Http\Controllers\Controller;
-use App\Http\Repositories\Admin\Others\CommuneRepository;
-use App\Http\Resources\CommuneResource;
+use App\Http\Repositories\Admin\Others\PatientTypeRepository;
+use App\Http\Resources\PatientTypeResource;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class ApiCommuneController extends Controller
+class ApiPatientTypeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,8 +17,8 @@ class ApiCommuneController extends Controller
     public function index()
     {
         try {
-            $communes=(new CommuneRepository())->get();
-            return CommuneResource::collection($communes);
+            $types = (new PatientTypeRepository())->get();
+            return PatientTypeResource::collection($types);
         } catch (Exception $ex) {
             return response()->json(['errors' => $ex->getMessage()]);
         }
@@ -35,14 +35,13 @@ class ApiCommuneController extends Controller
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
-
         try {
-            $inputs['name']=$request->name;
-            $commune=(new CommuneRepository())->create($inputs);
+            $inputs['name'] = $request->name;
+            $type = (new PatientTypeRepository())->create($inputs);
             $response = [
                 'success' => true,
-                'message' => 'Commune added successfull',
-                'commune'=>new CommuneResource($commune)
+                'message' => 'TYpe patient added successfull',
+                'commune' => new PatientTypeResource($type)
             ];
             return response()->json($response, 200);
         } catch (Exception $ex) {
@@ -56,8 +55,8 @@ class ApiCommuneController extends Controller
     public function show(int $id)
     {
         try {
-            $commune=(new CommuneRepository())->show($id);
-            return new CommuneResource($commune);
+            $type = (new PatientTypeRepository())->show($id);
+            return new PatientTypeResource($type);
         } catch (Exception $ex) {
             return response()->json(['errors' => $ex->getMessage()]);
         }
@@ -69,16 +68,16 @@ class ApiCommuneController extends Controller
     public function update(Request $request, int $id)
     {
         try {
-            $inputs['name']=$request->name;
-            $commune=(new CommuneRepository())->update($id,$inputs);
+            $inputs['name'] = $request->name;
+            $type = (new PatientTypeRepository())->update($id, $inputs);
             $response = [
                 'success' => true,
-                'message' => 'Commune updated successfull',
-                'commune'=>new CommuneResource($commune)
+                'message' => 'TYpe patient updated successfull',
+                'commune' => new PatientTypeResource($type)
             ];
             return response()->json($response, 200);
-        } catch (Exception $ex) {
-            return response()->json(['errors' => $ex->getMessage()]);
+        } catch (\Throwable $th) {
+            //throw $th;
         }
     }
 
@@ -88,22 +87,24 @@ class ApiCommuneController extends Controller
     public function destroy(int $id)
     {
         try {
-            $commune=$this->show($id);
-            if ($commune->patients->isEmpty()) {
-                $status=(new CommuneRepository())->delete($id);
+            $type = $this->show($id);
+            if (
+                $type->patientSubscribers->isEmpty() && $type->agentPatients->isEmpty()
+            ) {
+                $status=(new PatientTypeRepository())->delete($id);
                 $response = [
                     'success' => $status,
-                    'message' => 'Commune deleted successfull',
+                    'message' => 'Type patient deleted successfull',
                 ];
             } else {
                 $response = [
                     'success' => false,
-                    'message' => 'Action faild this commune take data',
+                    'message' => 'Action faild this type patient take data',
                 ];
             }
             return response()->json($response);
-        } catch (Exception $ex) {
-            return response()->json(['errors' => $ex->getMessage()]);
+        } catch (\Throwable $th) {
+            //throw $th;
         }
     }
 }
