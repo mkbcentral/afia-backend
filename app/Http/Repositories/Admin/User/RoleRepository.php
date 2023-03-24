@@ -4,7 +4,7 @@ namespace App\Http\Repositories\Admin\User;
 use App\Models\Role;
 
 class RoleRepository{
-    //Get all User
+    //Get all roles
     public function get()
     {
         $roles = Role::orderBy('name', 'asc')->get();
