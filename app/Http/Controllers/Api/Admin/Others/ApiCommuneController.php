@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\Api\Admin\User;
+namespace App\Http\Controllers\Api\Admin\Others;
 
 use App\Http\Controllers\Controller;
-use App\Http\Repositories\Admin\User\RoleRepository;
-use App\Http\Resources\RoleResource;
+use App\Http\Repositories\Admin\Others\CommuneRepository;
+use App\Http\Resources\CommuneResource;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class ApiRoleController extends Controller
+class ApiCommuneController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,8 +17,8 @@ class ApiRoleController extends Controller
     public function index()
     {
         try {
-            $roles = (new RoleRepository())->get();
-            return RoleResource::collection($roles);
+            $communes=(new CommuneRepository())->get();
+            return CommuneResource::collection($communes);
         } catch (Exception $ex) {
             return response()->json(['errors' => $ex->getMessage()]);
         }
@@ -35,13 +35,14 @@ class ApiRoleController extends Controller
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
+
         try {
-            $inputs['name'] = $request->name;
-            $role = (new RoleRepository())->create($inputs);
+            $inputs['name']=$request->name;
+            $commune=(new CommuneRepository())->create($inputs);
             $response = [
                 'success' => true,
-                'message' => 'Role added successfull',
-                'role'=>new RoleResource($role)
+                'message' => 'Commune added successfull',
+                'commune'=>new CommuneResource($commune)
             ];
             return response()->json($response, 200);
         } catch (Exception $ex) {
@@ -52,11 +53,11 @@ class ApiRoleController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(int $id)
     {
         try {
-            $role = (new RoleRepository())->show($id);
-            return new RoleResource($role);
+            $commune=(new CommuneRepository())->show($id);
+            return new CommuneResource($commune);
         } catch (Exception $ex) {
             return response()->json(['errors' => $ex->getMessage()]);
         }
@@ -65,15 +66,15 @@ class ApiRoleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, int $id)
     {
         try {
-            $inputs['name'] = $request->name;
-            $role = (new RoleRepository())->update($id, $inputs);
+            $inputs['name']=$request->name;
+            $commune=(new CommuneRepository())->update($id,$inputs);
             $response = [
                 'success' => true,
-                'message' => 'Role updated successfull',
-                'role'=>new RoleResource($role)
+                'message' => 'Commune updated successfull',
+                'commune'=>new CommuneResource($commune)
             ];
             return response()->json($response, 200);
         } catch (Exception $ex) {
@@ -86,12 +87,12 @@ class ApiRoleController extends Controller
      */
     public function destroy(int $id)
     {
-        $role=$this->show($id);
-        if ($role->users->isEmpty() && $role->status=="DISABLE") {
-            $status=(new RoleRepository())->delete($id);
+        $commune=$this->show($id);
+        if ($commune->patients->isEmpty()) {
+            $status=(new CommuneRepository())->delete($id);
             $response = [
                 'success' => $status,
-                'message' => 'Role deleted successfull',
+                'message' => 'Commune deleted successfull',
             ];
         } else {
             $response = [
@@ -100,19 +101,5 @@ class ApiRoleController extends Controller
             ];
         }
         return response()->json($response);
-    }
-    //Chang status
-    public function changeStatus(int $id, Request $request)
-    {
-        try {
-            (new RoleRepository())->changeStatus($id, $request->status);
-            $response = [
-                'success' => true,
-                'message' => 'Status role changed'
-            ];
-            return response()->json($response, 200);
-        } catch (Exception $ex) {
-            return response()->json(['errors' => $ex->getMessage()]);
-        }
     }
 }
