@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 
 class FormPatientRepository
 {
-    //Get all form
+    //Get all forms
     public function get()
     {
         $form = FormPatient::orderBy('created_at', 'desc')->get();

@@ -17,7 +17,7 @@ class ApiCommuneController extends Controller
     public function index()
     {
         try {
-            $communes=(new CommuneRepository())->get();
+            $communes = (new CommuneRepository())->get();
             return CommuneResource::collection($communes);
         } catch (Exception $ex) {
             return response()->json(['errors' => $ex->getMessage()]);
@@ -35,14 +35,13 @@ class ApiCommuneController extends Controller
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
-
         try {
-            $inputs['name']=$request->name;
-            $commune=(new CommuneRepository())->create($inputs);
+            $inputs['name'] = $request->name;
+            $commune = (new CommuneRepository())->create($inputs);
             $response = [
                 'success' => true,
                 'message' => 'Commune added successfull',
-                'commune'=>new CommuneResource($commune)
+                'commune' => new CommuneResource($commune)
             ];
             return response()->json($response, 200);
         } catch (Exception $ex) {
@@ -56,7 +55,7 @@ class ApiCommuneController extends Controller
     public function show(int $id)
     {
         try {
-            $commune=(new CommuneRepository())->show($id);
+            $commune = (new CommuneRepository())->show($id);
             return new CommuneResource($commune);
         } catch (Exception $ex) {
             return response()->json(['errors' => $ex->getMessage()]);
@@ -68,13 +67,19 @@ class ApiCommuneController extends Controller
      */
     public function update(Request $request, int $id)
     {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
         try {
-            $inputs['name']=$request->name;
-            $commune=(new CommuneRepository())->update($id,$inputs);
+            $inputs['name'] = $request->name;
+            $commune = (new CommuneRepository())->update($id, $inputs);
             $response = [
                 'success' => true,
                 'message' => 'Commune updated successfull',
-                'commune'=>new CommuneResource($commune)
+                'commune' => new CommuneResource($commune)
             ];
             return response()->json($response, 200);
         } catch (Exception $ex) {
@@ -88,9 +93,9 @@ class ApiCommuneController extends Controller
     public function destroy(int $id)
     {
         try {
-            $commune=$this->show($id);
+            $commune = $this->show($id);
             if ($commune->patients->isEmpty()) {
-                $status=(new CommuneRepository())->delete($id);
+                $status = (new CommuneRepository())->delete($id);
                 $response = [
                     'success' => $status,
                     'message' => 'Commune deleted successfull',

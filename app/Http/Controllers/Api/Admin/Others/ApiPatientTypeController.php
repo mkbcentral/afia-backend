@@ -67,6 +67,12 @@ class ApiPatientTypeController extends Controller
      */
     public function update(Request $request, int $id)
     {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
         try {
             $inputs['name'] = $request->name;
             $type = (new PatientTypeRepository())->update($id, $inputs);
@@ -76,8 +82,8 @@ class ApiPatientTypeController extends Controller
                 'commune' => new PatientTypeResource($type)
             ];
             return response()->json($response, 200);
-        } catch (\Throwable $th) {
-            //throw $th;
+        } catch (Exception $ex) {
+            return response()->json(['errors' => $ex->getMessage()]);
         }
     }
 
@@ -103,8 +109,8 @@ class ApiPatientTypeController extends Controller
                 ];
             }
             return response()->json($response);
-        } catch (\Throwable $th) {
-            //throw $th;
+        } catch (Exception $ex) {
+            return response()->json(['errors' => $ex->getMessage()]);
         }
     }
 }

@@ -73,16 +73,28 @@ class ApiSubscriptionController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $inputs['name'] = $request->name;
-        $inputs['amount'] = $request->amount;
-        $inputs['familly_quota'] = $request->familly_quota;
-        $subscription = (new SubscriptionRepository())->update($id, $inputs);
-        $response = [
-            'success' => true,
-            'message' => 'Branch updated successfull',
-            'subscription' => new SubscriptionResource($subscription)
-        ];
-        return response()->json($response, 200);
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string',
+            'amount' => 'required|numeric',
+            'familly_quota' => 'required|numeric',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+        try {
+            $inputs['name'] = $request->name;
+            $inputs['amount'] = $request->amount;
+            $inputs['familly_quota'] = $request->familly_quota;
+            $subscription = (new SubscriptionRepository())->update($id, $inputs);
+            $response = [
+                'success' => true,
+                'message' => 'Branch updated successfull',
+                'subscription' => new SubscriptionResource($subscription)
+            ];
+            return response()->json($response, 200);
+        } catch (Exception $ex) {
+            return response()->json(['errors' => $ex->getMessage()]);
+        }
     }
 
     /**
@@ -90,33 +102,37 @@ class ApiSubscriptionController extends Controller
      */
     public function destroy(string $id)
     {
-        $subscription = $this->show($id);
-        if ( $subscription->status == "ENABLE" && $subscription->hospital==null) {
-            $response = [
-                'success' => false,
-                'message' => 'Action faild this hosp take data',
-            ];
-        } else {
-            $status=(new SubscriptionRepository())->delete($id);
-            $response = [
-                'success' => $status,
-                'message' => 'Subscription deleted successfull',
-            ];
+        try {
+            $subscription = $this->show($id);
+            if ($subscription->status == "ENABLE" && $subscription->hospital == null) {
+                $response = [
+                    'success' => false,
+                    'message' => 'Action faild this hosp take data',
+                ];
+            } else {
+                $status = (new SubscriptionRepository())->delete($id);
+                $response = [
+                    'success' => $status,
+                    'message' => 'Subscription deleted successfull',
+                ];
+            }
+            return response()->json($response);
+        } catch (Exception $ex) {
+            return response()->json(['errors' => $ex->getMessage()]);
         }
-        return response()->json($response);
     }
-     //Chang status
-     public function changeStatus(int $id, Request $request)
-     {
-         try {
-             (new SubscriptionRepository())->changeStatus($id, $request->status);
-             $response = [
-                 'success' => true,
-                 'message' => 'Status subscription changed'
-             ];
-             return response()->json($response, 200);
-         } catch (Exception $ex) {
-             return response()->json(['errors' => $ex->getMessage()]);
-         }
-     }
+    //Change status
+    public function changeStatus(int $id, Request $request)
+    {
+        try {
+            (new SubscriptionRepository())->changeStatus($id, $request->status);
+            $response = [
+                'success' => true,
+                'message' => 'Status subscription changed'
+            ];
+            return response()->json($response, 200);
+        } catch (Exception $ex) {
+            return response()->json(['errors' => $ex->getMessage()]);
+        }
+    }
 }

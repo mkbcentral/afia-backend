@@ -38,7 +38,7 @@ class AgentPatientRepository
         return $patient;
     }
 
-    //Update Specific
+    //Update Specific patient
     public function update(int $id, array $inputs): AgentPatient
     {
         $patient = $this->show($id);
@@ -56,7 +56,7 @@ class AgentPatientRepository
         $patient->update();
         return $patient;
     }
-    //Delete role
+    //Delete patient
     public function delete(int $id):bool{
         $patient= $this->show($id);
         if ($patient->delete()) {

@@ -69,14 +69,24 @@ class ApiAgentServiceController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $inputs['name'] = $request->name;
-        $service = (new AgentServiceRepository())->update($id, $inputs);
-        $response = [
-            'success' => true,
-            'message' => 'Branch updated successfull',
-            'service' => new AgentServiceResource($service)
-        ];
-        return response()->json($response, 200);
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+        try {
+            $inputs['name'] = $request->name;
+            $service = (new AgentServiceRepository())->update($id, $inputs);
+            $response = [
+                'success' => true,
+                'message' => 'Branch updated successfull',
+                'service' => new AgentServiceResource($service)
+            ];
+            return response()->json($response, 200);
+        } catch (Exception $ex) {
+            return response()->json(['errors' => $ex->getMessage()]);
+        }
     }
 
     /**
@@ -84,6 +94,23 @@ class ApiAgentServiceController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            $service=$this->show($id);
+            if ($service->patients->isEmpty()) {
+                $status=(new AgentServiceRepository())->delete($id);
+                $response = [
+                    'success' => $status,
+                    'message' => 'Service deleted successfull',
+                ];
+            } else {
+                $response = [
+                    'success' => false,
+                    'message' => 'Action faild this service take data',
+                ];
+            }
+            return response()->json($response);
+        } catch (Exception $ex) {
+            return response()->json(['errors' => $ex->getMessage()]);
+        }
     }
 }

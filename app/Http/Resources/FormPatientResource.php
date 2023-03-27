@@ -14,6 +14,12 @@ class FormPatientResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'id'=>$this->id,
+            'number'=>$this->number,
+            'hospital'=>new HospitalResource($this->hospital),
+            'branch'=>new BranchResource($this->branch),
+            'created_by'=>new UserResource($this->user),
+        ];
     }
 }

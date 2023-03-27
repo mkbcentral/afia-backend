@@ -69,7 +69,14 @@ class ApiBranchController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $inputs['name'] = $request->name;
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string',
+        ]);
+        if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()], 422);
+        }
+        try {
+            $inputs['name'] = $request->name;
         $branach = (new BranchRepository())->update($id, $inputs);
         $response = [
             'success' => true,
@@ -77,6 +84,9 @@ class ApiBranchController extends Controller
             'branach' => new BranchResource($branach)
         ];
         return response()->json($response, 200);
+        } catch (Exception $ex) {
+            return response()->json(['errors' => $ex->getMessage()]);
+        }
     }
 
     /**
@@ -84,7 +94,8 @@ class ApiBranchController extends Controller
      */
     public function destroy(string $id)
     {
-        $branch = $this->show($id);
+        try {
+            $branch = $this->show($id);
         if ( $branch->status == "ENABLE") {
             $response = [
                 'success' => false,
@@ -98,9 +109,12 @@ class ApiBranchController extends Controller
             ];
         }
         return response()->json($response);
+        } catch (Exception $ex) {
+            return response()->json(['errors' => $ex->getMessage()]);
+        }
     }
 
-     //Chang status
+     //Change status
      public function changeStatus(int $id, Request $request)
      {
          try {

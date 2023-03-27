@@ -70,6 +70,13 @@ class ApiCompanyController extends Controller
      */
     public function update(Request $request, int $id)
     {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string',
+            'subscription_id' => 'required|numeric',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
         try {
             $inputs['name']=$request->name;
             $inputs['subscription_id']=$request->subscription_id;

@@ -73,16 +73,28 @@ class ApiHospitalController extends Controller
      */
     public function update(Request $request, int $id)
     {
-        $inputs['name'] = $request->name;
-        $inputs['email'] = $request->email;
-        $inputs['phone'] = $request->phone;
-        $hospital = (new HospitalRepository())->update($id, $inputs);
-        $response = [
-            'success' => true,
-            'message' => 'Hospital updated successfull',
-            'hospital' => new HospitalResource($hospital)
-        ];
-        return response()->json($response, 200);
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string',
+            'email' => 'required|email|unique:users,email',
+            'phone' => 'required|unique:users,phone',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+        try {
+            $inputs['name'] = $request->name;
+            $inputs['email'] = $request->email;
+            $inputs['phone'] = $request->phone;
+            $hospital = (new HospitalRepository())->update($id, $inputs);
+            $response = [
+                'success' => true,
+                'message' => 'Hospital updated successfull',
+                'hospital' => new HospitalResource($hospital)
+            ];
+            return response()->json($response, 200);
+        } catch (Exception $ex) {
+            return response()->json(['errors' => $ex->getMessage()]);
+        }
     }
 
     /**
@@ -90,23 +102,27 @@ class ApiHospitalController extends Controller
      */
     public function destroy(int $id)
     {
-        $hospital = $this->show($id);
-        if ($hospital->users->isEmpty() && $hospital->status == "ENABLE") {
-            $response = [
-                'success' => false,
-                'message' => 'Action faild this hosp take data',
-            ];
-        } else {
-            $status=(new HospitalRepository())->delete($id);
-            $response = [
-                'success' => $status,
-                'message' => 'Hospital deleted successfull',
-            ];
+        try {
+            $hospital = $this->show($id);
+            if ($hospital->users->isEmpty() && $hospital->status == "ENABLE") {
+                $response = [
+                    'success' => false,
+                    'message' => 'Action faild this hosp take data',
+                ];
+            } else {
+                $status = (new HospitalRepository())->delete($id);
+                $response = [
+                    'success' => $status,
+                    'message' => 'Hospital deleted successfull',
+                ];
+            }
+            return response()->json($response);
+        } catch (Exception $ex) {
+            return response()->json(['errors' => $ex->getMessage()]);
         }
-        return response()->json($response);
     }
 
-    //Chang status
+    //Change status
     public function changeStatus(int $id, Request $request)
     {
         try {
@@ -120,18 +136,18 @@ class ApiHospitalController extends Controller
             return response()->json(['errors' => $ex->getMessage()]);
         }
     }
-
+    //Update logo
     public function updateLogo($id, Request $request)
     {
         try {
             $response = [
-                'path'=>$request->logo
+                'path' => $request->logo
             ];
             return response()->json($response);
         } catch (Exception $ex) {
             $response = [
                 'success' => false,
-                'message' =>$ex->getMessage()
+                'message' => $ex->getMessage()
             ];
             return response()->json($response);
         }

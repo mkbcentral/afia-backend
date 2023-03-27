@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class FormPatient extends Model
 {
@@ -21,19 +22,24 @@ class FormPatient extends Model
         return $this->belongsTo(Branch::class, 'branch_id');
     }
 
-
-    public function patientSubscribers(): HasMany
+    public function user(): BelongsTo
     {
-        return $this->hasMany(PatientSubscribe::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function agentPatients(): HasMany
+
+    public function patientSubscriber(): HasOne
     {
-        return $this->hasMany(AgentPatient::class);
+        return $this->hasOne(PatientSubscribe::class);
     }
 
-    public function patientPrivates(): HasMany
+    public function agentPatient(): HasOne
     {
-        return $this->hasMany(PatientPrivate::class);
+        return $this->hoasOne(AgentPatient::class);
+    }
+
+    public function patientPrivate(): HasOne
+    {
+        return $this->hasOne(PatientPrivate::class);
     }
 }
