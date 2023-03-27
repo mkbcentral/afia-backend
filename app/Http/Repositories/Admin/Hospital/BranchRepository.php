@@ -14,7 +14,7 @@ class BranchRepository
         return $branchs;
     }
     //Create branch
-    public function create(array $inputs): branch
+    public function create(array $inputs): Branch
     {
         $branch = Branch::create([
             'name' => $inputs['name'],
@@ -23,14 +23,14 @@ class BranchRepository
         return $branch;
     }
     //Show spécific user
-    public function show(int $id): branch
+    public function show(int $id): Branch
     {
         $branch = Branch::find($id);
         return $branch;
     }
 
     //Update Specific
-    public function update(int $id, array $inputs): branch
+    public function update(int $id, array $inputs): Branch
     {
         $branch = $this->show($id);
         $branch->name = $inputs['name'];

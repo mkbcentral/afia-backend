@@ -18,7 +18,6 @@ return new class extends Migration
         Schema::create('form_patients', function (Blueprint $table) {
             $table->id();
             $table->string('number',20)->unique();
-            $table->foreignIdFor(PatientType::class)->constrained();
             $table->foreignIdFor(Hospital::class)->constrained();
             $table->foreignIdFor(Branch::class)->constrained();
             $table->foreignIdFor(User::class)->constrained();

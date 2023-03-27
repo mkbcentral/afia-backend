@@ -1,17 +1,16 @@
 <?php
 namespace App\Http\Repositories\Admin\Others;
 
-use App\Models\Commune;
 use App\Models\PatientType;
 
 class PatientTypeRepository{
-    //Get all communes
+    //Get all Patient types
     public function get()
     {
         $types = PatientType::orderBy('name', 'asc')->get();
         return $types;
     }
-    //Create commune
+    //Create Patient type
     public function create(array $inputs): PatientType
     {
         $type = PatientType::create([
@@ -19,7 +18,7 @@ class PatientTypeRepository{
         ]);
         return $type;
     }
-    //Show spécific commune
+    //Show spécific Patient type
     public function show(int $id): PatientType
     {
         $type = PatientType::find($id);
@@ -34,7 +33,7 @@ class PatientTypeRepository{
         $type->update();
         return $type;
     }
-    //Delete commune
+    //Delete Patient type
     public function delete(int $id):bool{
         $type= $this->show($id);
         if ($type->delete()) {
