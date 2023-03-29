@@ -41,7 +41,7 @@ class ApiPatientTypeController extends Controller
             $response = [
                 'success' => true,
                 'message' => 'TYpe patient added successfull',
-                'commune' => new PatientTypeResource($type)
+                'type' => new PatientTypeResource($type)
             ];
             return response()->json($response, 200);
         } catch (Exception $ex) {
@@ -79,7 +79,7 @@ class ApiPatientTypeController extends Controller
             $response = [
                 'success' => true,
                 'message' => 'TYpe patient updated successfull',
-                'commune' => new PatientTypeResource($type)
+                'type' => new PatientTypeResource($type)
             ];
             return response()->json($response, 200);
         } catch (Exception $ex) {

@@ -16,6 +16,7 @@ class CompanyRepository{
         $company = Company::create([
             'name' => $inputs['name'],
             'subscription_id' => $inputs['subscription_id'],
+            'hospital_id' => $inputs['hospital_id'],
         ]);
         return $company;
     }
@@ -32,6 +33,7 @@ class CompanyRepository{
         $company = $this->show($id);
         $company->name = $inputs['name'];
         $company->subscription_id = $inputs['subscription_id'];
+        $company->hospital_id = $inputs['hospital_id'];
         $company->update();
         return $company;
     }

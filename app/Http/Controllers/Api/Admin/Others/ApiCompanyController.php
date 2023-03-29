@@ -32,6 +32,7 @@ class ApiCompanyController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
             'subscription_id' => 'required|numeric',
+            'hospital_id' => 'required|numeric',
         ]);
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
@@ -40,6 +41,7 @@ class ApiCompanyController extends Controller
         try {
             $inputs['name']=$request->name;
             $inputs['subscription_id']=$request->subscription_id;
+            $inputs['hopsital_id']=$request->hopsital_id;
             $company=(new CompanyRepository())->create($inputs);
             $response = [
                 'success' => true,
@@ -73,6 +75,7 @@ class ApiCompanyController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
             'subscription_id' => 'required|numeric',
+            'hospital_id' => 'required|numeric',
         ]);
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
@@ -80,6 +83,7 @@ class ApiCompanyController extends Controller
         try {
             $inputs['name']=$request->name;
             $inputs['subscription_id']=$request->subscription_id;
+            $inputs['hospital_id']=$request->hospital_id;
             $company=(new CompanyRepository())->update($id,$inputs);
             $response = [
                 'success' => true,

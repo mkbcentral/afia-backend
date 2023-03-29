@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\AgentService;
+use App\Models\Commune;
 use App\Models\FormPatient;
 use App\Models\PatientType;
 use Illuminate\Database\Migrations\Migration;

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Hospital;
 use App\Models\Subscription;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -14,8 +15,9 @@ return new class extends Migration
     {
         Schema::create('companies', function (Blueprint $table) {
             $table->id();
-            $table->name('name');
+            $table->string('name');
             $table->foreignIdFor(Subscription::class)->constrained();
+            $table->foreignIdFor(Hospital::class)->constrained();
             $table->timestamps();
         });
     }

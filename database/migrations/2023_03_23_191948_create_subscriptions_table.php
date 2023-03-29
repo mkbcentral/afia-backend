@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('subscriptions', function (Blueprint $table) {
             $table->id();
-            $table->name('name');
+            $table->string('name');
             $table->integer('amount')->default(0);
             $table->integer('familly_quota')->default(0);
             $table->enum('status',['ENABLE','DISABLE'])->default('DISABLE');

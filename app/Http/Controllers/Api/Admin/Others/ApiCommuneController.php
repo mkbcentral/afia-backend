@@ -94,7 +94,7 @@ class ApiCommuneController extends Controller
     {
         try {
             $commune = $this->show($id);
-            if ($commune->patients->isEmpty()) {
+            if ($commune->patientSubscribers->isEmpty() && $commune->patientSubscribers->isEmpty() && $commune->patientSubscribers->isEmpty()) {
                 $status = (new CommuneRepository())->delete($id);
                 $response = [
                     'success' => $status,
