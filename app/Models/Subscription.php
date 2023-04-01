@@ -12,6 +12,9 @@ class Subscription extends Model
     use HasFactory;
     protected $fillable=[
         'name',
+        'amount',
+        'familly_quota',
+        'hospital_id'
     ];
     public function companies(): HasMany
     {
