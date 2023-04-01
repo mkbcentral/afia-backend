@@ -11,14 +11,7 @@ class Subscription extends Model
 {
     use HasFactory;
     protected $fillable=[
-<<<<<<< HEAD
-        'name',
-        'amount',
-        'familly_quota',
-        'hospital_id'
-=======
         'name','amount','familly_quota','hospital_id'
->>>>>>> fecc3dd15dc169715bcf6ee1b0e4de856c42f29a
     ];
     public function companies(): HasMany
     {
