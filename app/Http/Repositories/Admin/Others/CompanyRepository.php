@@ -33,7 +33,6 @@ class CompanyRepository{
         $company = $this->show($id);
         $company->name = $inputs['name'];
         $company->subscription_id = $inputs['subscription_id'];
-        $company->hospital_id = $inputs['hospital_id'];
         $company->update();
         return $company;
     }
