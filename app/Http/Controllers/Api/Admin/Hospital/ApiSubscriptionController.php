@@ -33,7 +33,6 @@ class ApiSubscriptionController extends Controller
             'name' => 'required|string',
             'amount' => 'required|numeric',
             'familly_quota' => 'required|numeric',
-            'hospital_id' => 'required|numeric',
         ]);
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
@@ -77,7 +76,7 @@ class ApiSubscriptionController extends Controller
             'name' => 'required|string',
             'amount' => 'required|numeric',
             'familly_quota' => 'required|numeric',
-            'hospital_id' => 'required|numeric',
+
         ]);
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
@@ -86,7 +85,7 @@ class ApiSubscriptionController extends Controller
             $inputs['name'] = $request->name;
             $inputs['amount'] = $request->amount;
             $inputs['familly_quota'] = $request->familly_quota;
-            $inputs['hospital_id'] = $request->hospital_id;
+
             $subscription = (new SubscriptionRepository())->update($id, $inputs);
             $response = [
                 'success' => true,

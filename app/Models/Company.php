@@ -14,6 +14,7 @@ class Company extends Model
     protected $fillable=[
         'name',
         'subscription_id',
+        'hospital_id',
     ];
 
     public function patientSubscribers(): HasMany
