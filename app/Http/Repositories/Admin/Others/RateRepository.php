@@ -9,9 +9,8 @@ class RateRepository
     //Get all rates
     public function get()
     {
-        $rate = Rate::whereStatus(true)
-            ->where('hospital_id', request('hospital'))
-            ->first();
+        $rate = Rate::where('hospital_id', auth()->user()->hospital->id)
+            ->get();
         return $rate;
     }
     //Create rate
@@ -33,10 +32,10 @@ class RateRepository
     //Update Specific
     public function update(int $id, array $inputs): Rate
     {
-        $service = $this->show($id);
-        $service->amount = $inputs['amount'];
-        $service->update();
-        return $service;
+        $rate = $this->show($id);
+        $rate->amount = $inputs['amount'];
+        $rate->update();
+        return $rate;
     }
     //Delete service
     public function delete(int $id): bool
@@ -49,14 +48,15 @@ class RateRepository
     }
 
     //Change Status rate
-    public function changeStatus(int $id): bool
+    public function changeStatus(int $id): Rate
     {
         $rate = $this->show($id);
         if ($rate->status == false) {
             $rate->status = true;
         } else {
-            $rate->status = true;
+            $rate->status = false;
         }
-        return $rate->status;
+        $rate->update();
+        return $rate;
     }
 }

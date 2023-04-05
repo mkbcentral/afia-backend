@@ -8,7 +8,9 @@ use App\Http\Controllers\Api\Admin\Hospital\ApiSubscriptionController;
 use App\Http\Controllers\Api\Admin\Others\ApiAgentServiceController;
 use App\Http\Controllers\Api\Admin\Others\ApiCommuneController;
 use App\Http\Controllers\Api\Admin\Others\ApiCompanyController;
+use App\Http\Controllers\Api\Admin\Others\ApiCurrencyController;
 use App\Http\Controllers\Api\Admin\Others\ApiPatientTypeController;
+use App\Http\Controllers\Api\Admin\Others\ApiRateController;
 use App\Http\Controllers\Api\Admin\User\ApiRoleController;
 use App\Http\Controllers\Api\Admin\User\ApiUserController;
 use App\Http\Controllers\Api\Auth\LogingController;
@@ -43,6 +45,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('patient-subscribe', ApiPatientPrivateController::class);
     Route::resource('agent-patient', ApiAgentPatientController::class);
     Route::resource('patient-type', ApiPatientTypeController::class);
+    Route::resource('rate', ApiRateController::class);
+    Route::resource('currency', ApiCurrencyController::class);
 
 
 
@@ -52,4 +56,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/hospital/status/{id}', [ApiHospitalController::class, 'changeStatus']);
     Route::put('/hospital/logo/{id}', [ApiHospitalController::class, 'updateLogo']);
     Route::put('/subscription/status/{id}', [ApiSubscriptionController::class, 'changeStatus']);
+    Route::put('/rate/status/{id}', [ApiRateController::class, 'changeStatus']);
 });
