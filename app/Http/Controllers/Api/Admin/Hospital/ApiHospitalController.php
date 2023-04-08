@@ -76,7 +76,7 @@ class ApiHospitalController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
             'email' => 'required|email|unique:users,email',
-            'phone' => 'required|unique:users,phone',
+            'phone' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);

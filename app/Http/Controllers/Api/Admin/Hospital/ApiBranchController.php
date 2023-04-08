@@ -17,8 +17,8 @@ class ApiBranchController extends Controller
     public function index()
     {
         try {
-            $branachs = (new BranchRepository())->get();
-            return BranchResource::collection($branachs);
+            $branchs = (new BranchRepository())->get();
+            return BranchResource::collection($branchs);
         } catch (Exception $ex) {
             return response()->json(['errors' => $ex->getMessage()]);
         }
@@ -39,11 +39,11 @@ class ApiBranchController extends Controller
         try {
             $inputs['name'] = $request->name;
             $inputs['hospital_id'] = $request->hospital_id;
-            $branach = (new BranchRepository())->create($inputs);
+            $branch = (new BranchRepository())->create($inputs);
             $response = [
                 'success' => true,
                 'message' => 'Branch added successfull',
-                'branach' => new BranchResource($branach)
+                'branch' => $branch
             ];
             return response()->json($response, 200);
         } catch (Exception $ex) {
@@ -57,8 +57,8 @@ class ApiBranchController extends Controller
     public function show(string $id)
     {
         try {
-            $branach = (new BranchRepository())->show($id);
-            return new BranchResource($branach);
+            $branch = (new BranchRepository())->show($id);
+            return new BranchResource($branch);
         } catch (Exception $ex) {
             return response()->json(['errors' => $ex->getMessage()]);
         }
@@ -77,11 +77,11 @@ class ApiBranchController extends Controller
         }
         try {
             $inputs['name'] = $request->name;
-        $branach = (new BranchRepository())->update($id, $inputs);
+        $branch = (new BranchRepository())->update($id, $inputs);
         $response = [
             'success' => true,
             'message' => 'Branch updated successfull',
-            'branach' => new BranchResource($branach)
+            'branch' => new BranchResource($branch)
         ];
         return response()->json($response, 200);
         } catch (Exception $ex) {

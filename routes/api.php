@@ -44,8 +44,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('agent-patient', ApiAgentPatientController::class);
     Route::resource('patient-type', ApiPatientTypeController::class);
 
-
-
     Route::put('/branch/status/{id}', [ApiBranchController::class, 'changeStatus']);
     Route::put('/role/status/{id}', [ApiRoleController::class, 'changeStatus']);
     Route::put('/user/status/{id}', [ApiUserController::class, 'changeStatus']);
