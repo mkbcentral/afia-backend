@@ -1,9 +1,11 @@
 <?php
+
 namespace App\Http\Repositories\Admin\User;
 
 use App\Models\Role;
 
-class RoleRepository{
+class RoleRepository
+{
     //Get all roles
     public function get()
     {
@@ -15,6 +17,7 @@ class RoleRepository{
     {
         $role = Role::create([
             'name' => $inputs['name'],
+            'hospital_id' => auth()->user()->hospital->id
         ]);
         return $role;
     }
@@ -30,17 +33,19 @@ class RoleRepository{
     {
         $role = $this->show($id);
         $role->name = $inputs['name'];
+        $role->hospital_id = auth()->user()->hospital->id;
         $role->update();
         return $role;
     }
     //Delete role
-    public function delete(int $id):bool{
-        $role= $this->show($id);
+    public function delete(int $id): bool
+    {
+        $role = $this->show($id);
         if ($role->delete()) {
-             $status=true;
+            $status = true;
         }
         return $status;
-     }
+    }
     // Disable Role
     public function changeStatus(int $id, string $status): void
     {

@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class AgentService extends Model
 {
+    protected $fillable=['name','hospital_id'];
     use HasFactory;
     public function patients(): HasMany
     {

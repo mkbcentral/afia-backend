@@ -49,7 +49,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('currency', ApiCurrencyController::class);
 
 
-
+    //Change status routes
     Route::put('/branch/status/{id}', [ApiBranchController::class, 'changeStatus']);
     Route::put('/role/status/{id}', [ApiRoleController::class, 'changeStatus']);
     Route::put('/user/status/{id}', [ApiUserController::class, 'changeStatus']);
@@ -57,4 +57,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/hospital/logo/{id}', [ApiHospitalController::class, 'updateLogo']);
     Route::put('/subscription/status/{id}', [ApiSubscriptionController::class, 'changeStatus']);
     Route::put('/rate/status/{id}', [ApiRateController::class, 'changeStatus']);
+
+    //Search routes
+    Route::get('/users/search',[ApiUserController::class,'searchUser']);
+
 });

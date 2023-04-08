@@ -1,11 +1,17 @@
 <?php
+
 namespace App\Http\Repositories\Admin\Others;
+
 use App\Models\Commune;
-class CommuneRepository{
+
+class CommuneRepository
+{
     //Get all communes
     public function get()
     {
-        $communes = Commune::orderBy('name', 'asc')->get();
+        $communes = Commune::orderBy('name', 'asc')
+
+        ->get();
         return $communes;
     }
     //Create commune
@@ -13,6 +19,7 @@ class CommuneRepository{
     {
         $commune = Commune::create([
             'name' => $inputs['name'],
+            'hospital_id' => auth()->user()->hospital->id
         ]);
         return $commune;
     }
@@ -28,15 +35,17 @@ class CommuneRepository{
     {
         $commune = $this->show($id);
         $commune->name = $inputs['name'];
+        $commune->hospital_id = auth()->user()->hospital->id;
         $commune->update();
         return $commune;
     }
     //Delete commune
-    public function delete(int $id):bool{
-        $commune= $this->show($id);
+    public function delete(int $id): bool
+    {
+        $commune = $this->show($id);
         if ($commune->delete()) {
-             $status=true;
+            $status = true;
         }
         return $status;
-     }
+    }
 }

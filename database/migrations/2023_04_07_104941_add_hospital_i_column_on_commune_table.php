@@ -12,11 +12,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('roles', function (Blueprint $table) {
-            $table->id();
-            $table->string('name',255);
-            $table->enum('status',['ENABLE','DISABLE'])->default('ENABLE');
-            $table->timestamps();
+        Schema::table('communes', function (Blueprint $table) {
+            $table->foreignIdFor(Hospital::class)->nullable()->after('name')->constrained();
         });
     }
 
@@ -25,6 +22,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('roles');
+        Schema::table('communes', function (Blueprint $table) {
+            $table->dropColumn('hospital_id');
+        });
     }
 };

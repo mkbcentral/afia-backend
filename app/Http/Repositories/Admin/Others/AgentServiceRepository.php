@@ -1,13 +1,17 @@
 <?php
+
 namespace App\Http\Repositories\Admin\Others;
 
 use App\Models\AgentService;
 
-class AgentServiceRepository{
+class AgentServiceRepository
+{
     //Get all services
     public function get()
     {
-        $services = AgentService::orderBy('name', 'asc')->get();
+        $services = AgentService::orderBy('name', 'asc')
+            ->where('hospital_id', auth()->user()->hospital->id)
+            ->get();
         return $services;
     }
     //Create service
@@ -31,16 +35,16 @@ class AgentServiceRepository{
     {
         $service = $this->show($id);
         $service->name = $inputs['name'];
-        $service->hospital_id = $inputs['hospital_id'];
         $service->update();
         return $service;
     }
     //Delete service
-    public function delete(int $id):bool{
-        $service= $this->show($id);
+    public function delete(int $id): bool
+    {
+        $service = $this->show($id);
         if ($service->delete()) {
-             $status=true;
+            $status = true;
         }
         return $status;
-     }
+    }
 }
