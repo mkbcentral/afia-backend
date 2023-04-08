@@ -31,14 +31,12 @@ class ApiBranchController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
-            'hospital_id' => 'required|numeric',
         ]);
         if ($validator->fails()) {
                 return response()->json(['errors' => $validator->errors()], 422);
         }
         try {
             $inputs['name'] = $request->name;
-            $inputs['hospital_id'] = $request->hospital_id;
             $branch = (new BranchRepository())->create($inputs);
             $response = [
                 'success' => true,

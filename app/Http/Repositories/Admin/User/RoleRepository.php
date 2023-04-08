@@ -9,7 +9,9 @@ class RoleRepository
     //Get all roles
     public function get()
     {
-        $roles = Role::orderBy('name', 'asc')->get();
+        $roles = Role::orderBy('name', 'asc')
+        ->where('hospital_id', auth()->user()->hospital->id)
+        ->get();
         return $roles;
     }
     //Create Role

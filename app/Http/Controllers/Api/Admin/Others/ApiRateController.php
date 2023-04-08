@@ -31,14 +31,12 @@ class ApiRateController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'amount' => 'required|numeric',
-            'hospital_id' => 'required|numeric',
         ]);
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
         try {
             $inputs['amount'] = $request->amount;
-            $inputs['hospital_id'] = $request->hospital_id;
             $rate = (new RateRepository())->create($inputs);
             $response = [
                 'success' => true,

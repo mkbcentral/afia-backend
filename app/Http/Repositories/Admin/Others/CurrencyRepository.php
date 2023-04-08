@@ -9,7 +9,7 @@ class CurrencyRepository
     //Get all currncies
     public function get()
     {
-        $currencie = Currency::all();
+        $currencie = Currency::where('hospital_id', auth()->user()->hospital->id)->get();
         return $currencie;
     }
     //Create currency
@@ -17,7 +17,7 @@ class CurrencyRepository
     {
         $currency = Currency::create([
             'name' => $inputs['name'],
-            'hospital_id' => $inputs['hospital_id'],
+            'hospital_id' => auth()->user()->hospital->id,
         ]);
         return $currency;
     }

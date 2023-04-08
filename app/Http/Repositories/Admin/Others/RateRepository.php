@@ -18,7 +18,7 @@ class RateRepository
     {
         $reate = Rate::create([
             'amount' => $inputs['amount'],
-            'hospital_id' => $inputs['hospital_id'],
+            'hospital_id' => auth()->user()->hospital->id,
         ]);
         return $reate;
     }

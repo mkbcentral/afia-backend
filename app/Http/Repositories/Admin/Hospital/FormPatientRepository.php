@@ -10,7 +10,9 @@ class FormPatientRepository
     //Get all forms
     public function get()
     {
-        $form = FormPatient::orderBy('created_at', 'desc')->get();
+        $form = FormPatient::orderBy('created_at', 'desc')
+            ->where('hospital_id', auth()->user()->hospital->id)
+            ->get();
         return $form;
     }
     //Create form
@@ -40,13 +42,14 @@ class FormPatientRepository
         return $form;
     }
     //Delete form
-    public function delete(int $id):bool{
-        $form= $this->show($id);
+    public function delete(int $id): bool
+    {
+        $form = $this->show($id);
         if ($form->delete()) {
-             $status=true;
+            $status = true;
         }
         return $status;
-     }
+    }
     // Disable form
     public function changeStatus(int $id, string $status): void
     {

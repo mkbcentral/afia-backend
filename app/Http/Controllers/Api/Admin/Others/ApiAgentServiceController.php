@@ -37,7 +37,6 @@ class ApiAgentServiceController extends Controller
         }
         try {
             $inputs['name'] = $request->name;
-            $inputs['hospital_id'] = auth()->user()->hospital->id;
             $service = (new AgentServiceRepository())->create($inputs);
             $response = [
                 'success' => true,

@@ -19,7 +19,7 @@ class AgentServiceRepository
     {
         $service = AgentService::create([
             'name' => $inputs['name'],
-            'hospital_id' => $inputs['hospital_id'],
+            'hospital_id' => auth()->user()->hospital->id,
         ]);
         return $service;
     }

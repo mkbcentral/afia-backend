@@ -39,7 +39,6 @@ class ApiCurrencyController extends Controller
         }
         try {
             $inputs['name'] = $request->name;
-            $inputs['hospital_id'] = auth()->user()->hospital->id;
             $currency = (new CurrencyRepository())->create($inputs);
             $response = [
                 'success' => true,

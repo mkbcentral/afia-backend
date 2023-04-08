@@ -41,7 +41,6 @@ class ApiSubscriptionController extends Controller
             $inputs['name'] = $request->name;
             $inputs['amount'] = $request->amount;
             $inputs['familly_quota'] = $request->familly_quota;
-            $inputs['hospital_id'] = $request->hospital_id;
             $subscription = (new SubscriptionRepository())->create($inputs);
             $response = [
                 'success' => true,

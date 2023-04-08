@@ -10,7 +10,9 @@ class UserRepository
     //Get all User
     public function get()
     {
-        $users = User::orderBy('name', 'asc')->paginate(5);
+        $users = User::orderBy('name', 'asc')
+            ->where('hospital_id', auth()->user()->hospital->id)
+            ->paginate(5);
         return $users;
     }
     //Create User
@@ -21,7 +23,7 @@ class UserRepository
             'email' => $inputs['email'],
             'phone' => $inputs['phone'],
             'password' => Hash::make($inputs['password']),
-            'hospital_id' => $inputs['hospital_id'],
+            'hospital_id' =>  auth()->user()->hospital->id,
             'role_id' => $inputs['role_id'],
             'branch_id' => $inputs['branch_id']
         ]);
@@ -46,12 +48,13 @@ class UserRepository
         return $user;
     }
     //Delete
-    public function delete(int $id):bool{
-       $user= $this->show($id);
-       if ($user->delete()) {
-            $status=true;
-       }
-       return $status;
+    public function delete(int $id): bool
+    {
+        $user = $this->show($id);
+        if ($user->delete()) {
+            $status = true;
+        }
+        return $status;
     }
     // Disable user
     public function changeStatus(int $id, $status): void
@@ -62,8 +65,11 @@ class UserRepository
     }
 
     //Search user
-    public function search($query){
-        $users=User::where('name','like',"%{$query}%")->orderBy('name','ASC')->get();
+    public function search($query)
+    {
+        $users = User::where('name', 'like', "%{$query}%")
+            ->where('hospital_id', auth()->user()->hospital->id)
+            ->orderBy('name', 'ASC')->get();
         return $users;
     }
 }

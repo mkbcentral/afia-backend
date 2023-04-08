@@ -10,7 +10,9 @@ class SubscriptionRepository
     //Get all susbscription
     public function get()
     {
-        $subscriptions = Subscription::orderBy('name', 'asc')->get();
+        $subscriptions = Subscription::orderBy('name', 'asc')
+            ->where('hospital_id', auth()->user()->hospital->id)
+            ->get();
         return $subscriptions;
     }
     //Create susbscription
@@ -20,7 +22,7 @@ class SubscriptionRepository
             'name' => $inputs['name'],
             'amount' => $inputs['amount'],
             'familly_quota' => $inputs['familly_quota'],
-            'hospital_id' => $inputs['hospital_id'],
+            'hospital_id' => auth()->user()->hospital->id,
         ]);
         return $subscription;
     }

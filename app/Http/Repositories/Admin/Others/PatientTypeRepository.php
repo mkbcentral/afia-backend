@@ -7,7 +7,9 @@ class PatientTypeRepository{
     //Get all Patient types
     public function get()
     {
-        $types = PatientType::orderBy('name', 'asc')->get();
+        $types = PatientType::orderBy('name', 'asc')
+        ->where('hospital_id', auth()->user()->hospital->id)
+        ->get();
         return $types;
     }
     //Create Patient type

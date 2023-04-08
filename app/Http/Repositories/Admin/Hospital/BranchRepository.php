@@ -10,7 +10,9 @@ class BranchRepository
     //Get all branch
     public function get()
     {
-        $branchs = Branch::orderBy('name', 'asc')->get();
+        $branchs = Branch::orderBy('name', 'asc')
+        ->where('hospital_id', auth()->user()->hospital->id)
+        ->get();
         return $branchs;
     }
     //Create branch
@@ -18,7 +20,7 @@ class BranchRepository
     {
         $branch = Branch::create([
             'name' => $inputs['name'],
-            'hospital_id' => $inputs['hospital_id'],
+            'hospital_id' => auth()->user()->hospital->id,
         ]);
         return $branch;
     }

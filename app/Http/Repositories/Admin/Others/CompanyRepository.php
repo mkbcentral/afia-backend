@@ -1,13 +1,18 @@
 <?php
+
 namespace App\Http\Repositories\Admin\Others;
+
 use App\Models\Commune;
 use App\Models\Company;
 
-class CompanyRepository{
+class CompanyRepository
+{
     //Get all companies
     public function get()
     {
-        $companies = Company::orderBy('name', 'asc')->get();
+        $companies = Company::orderBy('name', 'asc')
+            ->where('hospital_id', auth()->user()->hospital->id)
+            ->get();
         return $companies;
     }
     //Create comany
@@ -16,7 +21,7 @@ class CompanyRepository{
         $company = Company::create([
             'name' => $inputs['name'],
             'subscription_id' => $inputs['subscription_id'],
-            'hospital_id' => $inputs['hospital_id'],
+            'hospital_id' => auth()->user()->hospital->id
         ]);
         return $company;
     }
@@ -37,11 +42,12 @@ class CompanyRepository{
         return $company;
     }
     //Delete commune
-    public function delete(int $id):bool{
-        $company= $this->show($id);
+    public function delete(int $id): bool
+    {
+        $company = $this->show($id);
         if ($company->delete()) {
-             $status=true;
+            $status = true;
         }
         return $status;
-     }
+    }
 }

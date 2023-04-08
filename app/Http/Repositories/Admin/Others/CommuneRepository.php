@@ -10,7 +10,7 @@ class CommuneRepository
     public function get()
     {
         $communes = Commune::orderBy('name', 'asc')
-
+        ->where('hospital_id', auth()->user()->hospital->id)
         ->get();
         return $communes;
     }
