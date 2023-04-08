@@ -10,7 +10,7 @@ class UserRepository
     //Get all User
     public function get()
     {
-        $users = User::orderBy('name', 'asc')->paginate(2);
+        $users = User::orderBy('name', 'asc')->paginate(5);
         return $users;
     }
     //Create User
