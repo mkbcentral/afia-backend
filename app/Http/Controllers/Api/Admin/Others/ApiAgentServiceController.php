@@ -31,14 +31,13 @@ class ApiAgentServiceController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
-            'hospital_id' => 'required|numeric',
         ]);
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
         try {
             $inputs['name'] = $request->name;
-            $inputs['hospital_id'] = $request->hospital_id;
+            $inputs['hospital_id'] = auth()->user()->hospital->id;
             $service = (new AgentServiceRepository())->create($inputs);
             $response = [
                 'success' => true,

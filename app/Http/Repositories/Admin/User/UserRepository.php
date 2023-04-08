@@ -10,7 +10,7 @@ class UserRepository
     //Get all User
     public function get()
     {
-        $users = User::orderBy('name', 'asc')->get();
+        $users = User::orderBy('name', 'asc')->paginate(2);
         return $users;
     }
     //Create User
@@ -59,5 +59,11 @@ class UserRepository
         $user = $this->show($id);
         $user->status = $status;
         $user->update();
+    }
+
+    //Search user
+    public function search($query){
+        $users=User::where('name','like',"%{$query}%")->orderBy('name','ASC')->get();
+        return $users;
     }
 }

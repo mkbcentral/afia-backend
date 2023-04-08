@@ -12,11 +12,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('currencies', function (Blueprint $table) {
-            $table->id();
-            $table->string('name')->default('CDF');
-            $table->foreignIdFor(Hospital::class)->constrained();
-            $table->timestamps();
+        Schema::table('communes', function (Blueprint $table) {
+            $table->foreignIdFor(Hospital::class)->nullable()->after('name')->constrained();
         });
     }
 
@@ -25,6 +22,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('currencies');
+        Schema::table('communes', function (Blueprint $table) {
+            $table->dropColumn('hospital_id');
+        });
     }
 };

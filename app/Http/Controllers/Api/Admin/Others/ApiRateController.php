@@ -17,8 +17,8 @@ class ApiRateController extends Controller
     public function index()
     {
         try {
-            $rate = (new RateRepository())->get();
-            return new RateResource($rate);
+            $rates = RateResource::collection((new RateRepository())->get());
+            return $rates;
         } catch (Exception $ex) {
             return response()->json(['errors' => $ex->getMessage()]);
         }
@@ -76,7 +76,7 @@ class ApiRateController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
         try {
-            $inputs['amount'] = $request->name;
+            $inputs['amount'] = $request->amount;
             $rate = (new RateRepository())->update($id, $inputs);
             $response = [
                 'success' => true,
@@ -110,10 +110,11 @@ class ApiRateController extends Controller
     public function changeStatus(int $id)
     {
         try {
-            $status = (new RateRepository())->changeStatus($id);
+            $rate = (new RateRepository())->changeStatus($id);
             $response = [
-                'success' => $status,
-                'message' => 'Rate deleted successfull',
+                'success' => true,
+                'rate'=>new RateResource($rate),
+                'message' => 'Status rate changed',
             ];
             return response()->json($response);
         } catch (Exception $ex) {

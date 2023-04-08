@@ -15,6 +15,7 @@ class PatientTypeRepository{
     {
         $type = PatientType::create([
             'name' => $inputs['name'],
+            'hospital_id' => auth()->user()->hospital->id
         ]);
         return $type;
     }
@@ -30,6 +31,7 @@ class PatientTypeRepository{
     {
         $type = $this->show($id);
         $type->name = $inputs['name'];
+        $type->hospital_id = auth()->user()->hospital->id;
         $type->update();
         return $type;
     }

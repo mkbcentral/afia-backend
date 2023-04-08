@@ -131,4 +131,17 @@ class ApiUserController extends Controller
             return response()->json(['errors' => $ex->getMessage()]);
         }
     }
+
+    //Search user
+    public function searchUser(){
+        $searchQuery=request('query');
+        try {
+            $users= (new UserRepository())->search($searchQuery);
+            return UserResource::collection($users);
+        } catch (Exception $ex) {
+            return response()->json(['errors' => $ex->getMessage()]);
+        }
+    }
+
+
 }
