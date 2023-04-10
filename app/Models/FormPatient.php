@@ -12,6 +12,8 @@ class FormPatient extends Model
 {
     use HasFactory;
 
+    protected $fillable=['hospital_id','number','branch_id','user_id'];
+
     public function hospital(): BelongsTo
     {
         return $this->belongsTo(Hospital::class, 'hospital_id');

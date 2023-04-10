@@ -19,7 +19,7 @@ class PatientPrivate extends Model
         'commune_id',
         'quartier',
         'street',
-        'patient_type_id',
+        'parcel_number',
         'form_patient_id'
     ];
 

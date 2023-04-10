@@ -25,6 +25,7 @@ class PatientPrivateRepository
             'other_phone' => $inputs['other_phone'],
             'quartier' => $inputs['quartier'],
             'street' => $inputs['street'],
+            'parcel_number' => $inputs['parcel_number'],
             'commune_id' => $inputs['commune_id'],
             'form_patient_id' => $inputs['form_patient_id'],
         ]);

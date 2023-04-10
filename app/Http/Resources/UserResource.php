@@ -20,6 +20,7 @@ class UserResource extends JsonResource
             'email'=>$this->email,
             'phone'=>$this->phone,
             'status'=>$this->status,
+            'color'=>$this->status=='ENABLE'?'primary':'danger',
             'role'=>new RoleResource($this->role),
             'hospital'=>new HospitalResource($this->hospital)
         ];

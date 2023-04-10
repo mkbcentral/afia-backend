@@ -10,9 +10,10 @@ class UserRepository
     //Get all User
     public function get()
     {
-        $users = User::orderBy('name', 'asc')
-            ->where('hospital_id', auth()->user()->hospital->id)
-            ->paginate(5);
+        $users = User::query()
+            ->orderBy('name', 'asc')
+            //->where('hospital_id', auth()->user()->hospital->id)
+            ->paginate(3);
         return $users;
     }
     //Create User

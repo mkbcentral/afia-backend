@@ -20,9 +20,9 @@ class FormPatientRepository
     {
         $form = FormPatient::create([
             'number' => $inputs['number'],
-            'hospital_id' => $inputs['hospital_id'],
-            'branch_id' => $inputs['branch_id'],
-            'user_id' => $inputs['user_id'],
+            'hospital_id' =>auth()->user()->hospital->id,
+            'branch_id' =>auth()->user()->branch->id,
+            'user_id' =>auth()->user()->is_dir,
         ]);
         return $form;
     }
