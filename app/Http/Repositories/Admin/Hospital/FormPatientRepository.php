@@ -22,7 +22,7 @@ class FormPatientRepository
             'number' => $inputs['number'],
             'hospital_id' =>auth()->user()->hospital->id,
             'branch_id' =>auth()->user()->branch->id,
-            'user_id' =>auth()->user()->is_dir,
+            'user_id' =>auth()->user()->id,
         ]);
         return $form;
     }

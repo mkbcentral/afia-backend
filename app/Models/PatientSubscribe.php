@@ -18,6 +18,7 @@ class PatientSubscribe extends Model
         'commune_id',
         'quartier',
         'street',
+        'parcel_number',
         'company_id',
         'patient_type_id',
         'form_patient_id'

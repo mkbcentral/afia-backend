@@ -32,7 +32,19 @@ class ApiPatientPrivateController extends Controller
      */
     public function store(Request $request)
     {
-
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string',
+            'gender' => 'required|string',
+            'data_of_birth' => 'required|date',
+            'phone' => 'nullable|string',
+            'other_phone' => 'nullable|string',
+            'quartier' => 'nullable|string',
+            'parcel_number' => 'nullable|string',
+            'street' => 'nullable|string',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
         try {
             //Create first form
             $inputs['number'] = (new FormPatientNumberFormat())->getFormPrivateNumber();
@@ -44,7 +56,7 @@ class ApiPatientPrivateController extends Controller
             $inputs['phone'] = $request->phone;
             $inputs['other_phone'] = $request->other_phone;
             $inputs['commune_id'] = $request->commune_id;
-            $inputs['parcel_number'] = $request->quartier;
+            $inputs['parcel_number'] = $request->parcel_number;
             $inputs['quartier'] = $request->quartier;
             $inputs['street'] = $request->street;
             $inputs['form_patient_id'] = $form->id;

@@ -18,8 +18,9 @@ class AgentPatient extends Model
         'commune_id',
         'quartier',
         'street',
+        'parcel_number',
         'agent_patient_id',
-        'patient_type_id',
+        'agent_service_id',
         'form_patient_id'
     ];
 

@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\Admin\Hospital\ApiAgentPatientController;
 use App\Http\Controllers\Api\Admin\Hospital\ApiBranchController;
 use App\Http\Controllers\Api\Admin\Hospital\ApiHospitalController;
 use App\Http\Controllers\Api\Admin\Hospital\ApiPatientPrivateController;
+use App\Http\Controllers\Api\Admin\Hospital\ApiPatientSubscribeController;
 use App\Http\Controllers\Api\Admin\Hospital\ApiSubscriptionController;
 use App\Http\Controllers\Api\Admin\Others\ApiAgentServiceController;
 use App\Http\Controllers\Api\Admin\Others\ApiCommuneController;
@@ -41,7 +42,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('company', ApiCompanyController::class);
     Route::resource('subscription', ApiSubscriptionController::class);
     Route::resource('patient-private', ApiPatientPrivateController::class);
-    Route::resource('patient-subscribe', ApiPatientPrivateController::class);
+    Route::resource('patient-subscribe', ApiPatientSubscribeController::class);
     Route::resource('agent-patient', ApiAgentPatientController::class);
     Route::resource('patient-type', ApiPatientTypeController::class);
     Route::resource('rate', ApiRateController::class);

@@ -36,12 +36,11 @@ class ApiAgentPatientController extends Controller
             'gender' => 'required|string',
             'data_of_birth' => 'required|date',
             'phone' => 'nullable|string',
-            'other_phone' => 'nullbale|string',
-            'quartier' => 'nullbale|string',
-            'form_patient_id' => 'nullbale|string',
-            'agent_service_id' => 'nullbale|numeric',
-            'patient_type_id' => 'nullbale|numeric',
-            'form_patient_id' => 'required|numeric',
+            'other_phone' => 'nullable|string',
+            'quartier' => 'nullable|string',
+            'number_parcel' => 'nullable|string',
+            'agent_service_id' => 'nullable|numeric',
+            'patient_type_id' => 'nullable|numeric',
         ]);
         if ($validator->fails()) {
                 return response()->json(['errors' => $validator->errors()], 422);
@@ -57,6 +56,7 @@ class ApiAgentPatientController extends Controller
             $inputs['phone'] = $request->phone;
             $inputs['other_phone'] = $request->other_phone;
             $inputs['quartier'] = $request->quartier;
+            $inputs['street'] = $request->street;
             $inputs['commune_id'] = $request->commune_id;
             $inputs['agent_service_id'] = $request->agent_service_id;
             $inputs['patient_type_id'] = $request->patient_type_id;
@@ -96,11 +96,11 @@ class ApiAgentPatientController extends Controller
             'gender' => 'required|string',
             'data_of_birth' => 'required|date',
             'phone' => 'nullable|string',
-            'other_phone' => 'nullbale|string',
-            'quartier' => 'nullbale|string',
-            'form_patient_id' => 'nullbale|string',
-            'compny_id' => 'nullbale|numeric',
-            'patient_type_id' => 'nullbale|numeric',
+            'other_phone' => 'nullable|string',
+            'quartier' => 'nullable|string',
+            'form_patient_id' => 'nullable|string',
+            'compny_id' => 'nullable|numeric',
+            'patient_type_id' => 'nullable|numeric',
         ]);
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);

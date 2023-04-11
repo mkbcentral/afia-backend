@@ -18,7 +18,7 @@ class AgentPatientResource extends JsonResource
             'id'=>$this->is,
             'name'=>$this->name,
             'gender'=>$this->gender,
-            'data_of_birth'=>$this->getAge(),
+            'data_of_birth'=>$this->data_of_birth,
             'phone'=>$this->phone,
             'other_phone'=>$this->other_phonen,
             'quartier'=>$this->quartier,
