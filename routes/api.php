@@ -32,6 +32,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::post('login', LogingController::class);
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::resource('role', ApiRoleController::class);
     Route::resource('user', ApiUserController::class);

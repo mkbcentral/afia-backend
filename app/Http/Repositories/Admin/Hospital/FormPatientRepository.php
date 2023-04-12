@@ -12,6 +12,7 @@ class FormPatientRepository
     {
         $form = FormPatient::orderBy('created_at', 'desc')
             ->where('hospital_id', auth()->user()->hospital->id)
+            ->where('branch_id', auth()->user()->branch_id->id)
             ->get();
         return $form;
     }
