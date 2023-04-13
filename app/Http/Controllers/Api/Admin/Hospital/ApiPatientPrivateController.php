@@ -21,7 +21,7 @@ class ApiPatientPrivateController extends Controller
     {
         try {
             $patients = (new PatientPrivateRepository())->get();
-            return PatientTypeResource::collection($patients);
+            return PatientPrivateResource::collection($patients);
         } catch (Exception $ex) {
             return response()->json(['errors' => $ex->getMessage()]);
         }
@@ -39,8 +39,9 @@ class ApiPatientPrivateController extends Controller
             'phone' => 'nullable|string',
             'other_phone' => 'nullable|string',
             'quartier' => 'nullable|string',
-            'parcel_number' => 'nullable|string',
+            'parcel_number' => 'nullable|number',
             'street' => 'nullable|string',
+            'commune_id' => 'required|numeric',
         ]);
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
@@ -64,7 +65,7 @@ class ApiPatientPrivateController extends Controller
             $response = [
                 'success' => true,
                 'message' => 'Patient added successfull',
-                'patient' => new PatientTypeResource($patient)
+                'patient' => new PatientPrivateResource($patient)
             ];
             return response()->json($response, 200);
         } catch (Exception $ex) {
@@ -97,22 +98,20 @@ class ApiPatientPrivateController extends Controller
             'phone' => 'nullable|string',
             'other_phone' => 'nullbale|string',
             'quartier' => 'nullbale|string',
-            'form_patient_id' => 'required|numeric',
+            'parcel_number' => 'nullbale|number',
             'commune_id' => 'required|numeric',
         ]);
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
         try {
-             //Create first form
-             $inputs['number'] = (new FormPatientNumberFormat())->getFormPrivateNumber();
-             $form = (new FormPatientRepository())->create($inputs);
-             //Create Patient
+            //Update Patient
             $inputs['name'] = $request->name;
             $inputs['gender'] = $request->gender;
             $inputs['data_of_birth'] = $request->data_of_birth;
             $inputs['phone'] = $request->phone;
             $inputs['other_phone'] = $request->other_phone;
+            $inputs['parcel_number'] = $request->parcel_number;
             $inputs['quartier'] = $request->quartier;
             $inputs['commune_id'] = $request->commune_id;
             $patient = (new PatientPrivateRepository())->update($id, $inputs);

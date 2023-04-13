@@ -38,7 +38,7 @@ class ApiAgentPatientController extends Controller
             'phone' => 'nullable|string',
             'other_phone' => 'nullable|string',
             'quartier' => 'nullable|string',
-            'number_parcel' => 'nullable|string',
+            'parcel_number' => 'nullable|string',
             'agent_service_id' => 'nullable|numeric',
             'patient_type_id' => 'nullable|numeric',
         ]);
@@ -57,6 +57,7 @@ class ApiAgentPatientController extends Controller
             $inputs['other_phone'] = $request->other_phone;
             $inputs['quartier'] = $request->quartier;
             $inputs['street'] = $request->street;
+            $inputs['parcel_number'] = $request->parcel_number;
             $inputs['commune_id'] = $request->commune_id;
             $inputs['agent_service_id'] = $request->agent_service_id;
             $inputs['patient_type_id'] = $request->patient_type_id;
@@ -112,6 +113,8 @@ class ApiAgentPatientController extends Controller
             $inputs['phone'] = $request->phone;
             $inputs['other_phone'] = $request->other_phone;
             $inputs['quartier'] = $request->quartier;
+            $inputs['street'] = $request->street;
+            $inputs['parcel_number'] = $request->parcel_number;
             $inputs['commune_id'] = $request->commune_id;
             $inputs['company_id'] = $request->company_id;
             $inputs['patient_type_id'] = $request->patient_type_id;

@@ -15,10 +15,10 @@ class PatientPrivateResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'=>$this->is,
+            'id'=>$this->id,
             'name'=>$this->name,
             'gender'=>$this->gender,
-            'data_of_birth'=>$this->getAge(),
+            'data_of_birth'=>$this->data_of_birth,
             'phone'=>$this->phone,
             'other_phone'=>$this->other_phonen,
             'quartier'=>$this->quartier,

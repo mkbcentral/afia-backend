@@ -49,7 +49,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('rate', ApiRateController::class);
     Route::resource('currency', ApiCurrencyController::class);
 
-
     //Change status routes
     Route::put('/branch/status/{id}', [ApiBranchController::class, 'changeStatus']);
     Route::put('/role/status/{id}', [ApiRoleController::class, 'changeStatus']);

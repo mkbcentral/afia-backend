@@ -39,7 +39,7 @@ class ApiPatientSubscribeController extends Controller
             'phone' => 'nullable|string',
             'other_phone' => 'nullable|string',
             'quartier' => 'nullable|string',
-            'parcel_number' => 'nullable|string',
+            'parcel_number' => 'nullable|numeric',
             'street' => 'nullable|string',
             'compny_id' => 'nullable|numeric',
             'patient_type_id' => 'nullable|numeric',
@@ -47,7 +47,6 @@ class ApiPatientSubscribeController extends Controller
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
-
         try {
             //Create first form
             $inputs['number'] = (new FormPatientNumberFormat())->getFormPrivateNumber();
@@ -60,6 +59,7 @@ class ApiPatientSubscribeController extends Controller
             $inputs['other_phone'] = $request->other_phone;
             $inputs['quartier'] = $request->quartier;
             $inputs['street'] = $request->street;
+            $inputs['parcel_number'] = $request->parcel_number;
             $inputs['commune_id'] = $request->commune_id;
             $inputs['company_id'] = $request->company_id;
             $inputs['patient_type_id'] = $request->patient_type_id;
@@ -100,11 +100,12 @@ class ApiPatientSubscribeController extends Controller
             'gender' => 'required|string',
             'data_of_birth' => 'required|date',
             'phone' => 'nullable|string',
-            'other_phone' => 'nullbale|string',
-            'quartier' => 'nullbale|string',
-            'form_patient_id' => 'nullbale|string',
-            'compny_id' => 'nullbale|numeric',
-            'patient_type_id' => 'nullbale|numeric',
+            'other_phone' => 'nullable|string',
+            'quartier' => 'nullable|string',
+            'parcel_number' => 'nullable|numeric',
+            'street' => 'nullable|string',
+            'compny_id' => 'nullable|numeric',
+            'patient_type_id' => 'nullable|numeric',
         ]);
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
@@ -116,6 +117,7 @@ class ApiPatientSubscribeController extends Controller
             $inputs['phone'] = $request->phone;
             $inputs['other_phone'] = $request->other_phone;
             $inputs['quartier'] = $request->quartier;
+            $inputs['parcel_number'] = $request->parcel_number;
             $inputs['commune_id'] = $request->commune_id;
             $inputs['company_id'] = $request->company_id;
             $inputs['patient_type_id'] = $request->patient_type_id;

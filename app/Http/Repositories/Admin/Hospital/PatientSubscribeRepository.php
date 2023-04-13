@@ -10,7 +10,12 @@ class PatientSubscribeRepository
     //Get all patient
     public function get()
     {
-        $patients = PatientSubscribe::orderBy('name', 'asc')->get();
+        $patients = PatientSubscribe::join('form_patients', 'form_patients.id', '=', 'patient_subscribes.form_patient_id')
+            ->select('patient_subscribes.*', 'form_patients.*')
+            ->where('form_patients.hospital_id', auth()->user()->hospital->id)
+            ->where('form_patients.branch_id', auth()->user()->branch->id)
+            ->orderBy('patient_subscribes.name', 'asc')
+            ->get();
         return $patients;
     }
     //Create patient
@@ -49,19 +54,21 @@ class PatientSubscribeRepository
         $patient->other_phone = $inputs['other_phone'];
         $patient->quartier = $inputs['quartier'];
         $patient->street = $inputs['street'];
+        $patient->parcel_number = $inputs['parcel_number'];
         $patient->commune_id = $inputs['commune_id'];
-        $patient->patient_id = $inputs['patient_id'];
+        $patient->patient_type_id = $inputs['patient_type_id'];
         $patient->company_id = $inputs['company_id'];
 
         $patient->update();
         return $patient;
     }
     //Delete role
-    public function delete(int $id):bool{
-        $patient= $this->show($id);
+    public function delete(int $id): bool
+    {
+        $patient = $this->show($id);
         if ($patient->delete()) {
-             $status=true;
+            $status = true;
         }
         return $status;
-     }
+    }
 }

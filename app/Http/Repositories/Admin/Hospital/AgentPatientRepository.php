@@ -10,7 +10,12 @@ class AgentPatientRepository
     //Get all patient
     public function get()
     {
-        $patients = AgentPatient::orderBy('name', 'asc')->get();
+        $patients = AgentPatient::join('form_patients', 'form_patients.id', '=', 'agent_patients.form_patient_id')
+            ->select('agent_patients.*', 'form_patients.*')
+            ->where('form_patients.hospital_id', auth()->user()->hospital->id)
+            ->where('form_patients.branch_id', auth()->user()->branch->id)
+            ->orderBy('agent_patients.name', 'asc')
+            ->get();
         return $patients;
     }
     //Create patient
@@ -24,6 +29,7 @@ class AgentPatientRepository
             'other_phone' => $inputs['other_phone'],
             'quartier' => $inputs['quartier'],
             'street' => $inputs['street'],
+            'parcel_number' => $inputs['parcel_number'],
             'commune_id' => $inputs['commune_id'],
             'patient_type_id' => $inputs['patient_type_id'],
             'agent_service_id' => $inputs['agent_service_id'],
@@ -49,19 +55,20 @@ class AgentPatientRepository
         $patient->other_phone = $inputs['other_phone'];
         $patient->quartier = $inputs['quartier'];
         $patient->street = $inputs['street'];
+        $patient->parcel_number = $inputs['parcel_number'];
         $patient->commune_id = $inputs['commune_id'];
-        $patient->patient_id = $inputs['patient_id'];
+        $patient->patient_type_id = $inputs['patient_type_id'];
         $patient->agent_service_id = $inputs['agent_service_id'];
-
         $patient->update();
         return $patient;
     }
     //Delete patient
-    public function delete(int $id):bool{
-        $patient= $this->show($id);
+    public function delete(int $id): bool
+    {
+        $patient = $this->show($id);
         if ($patient->delete()) {
-             $status=true;
+            $status = true;
         }
         return $status;
-     }
+    }
 }

@@ -8,13 +8,18 @@ use Illuminate\Support\Facades\Auth;
 
 class PatientPrivateRepository
 {
-    //Get all patient
+    //Get all patients
     public function get()
     {
-        $patients = PatientPrivate::orderBy('name', 'asc')->get();
+        $patients = PatientPrivate::join('form_patients', 'form_patients.id', '=', 'patient_privates.form_patient_id')
+            ->select('patient_privates.*', 'form_patients.*')
+            ->where('form_patients.hospital_id', auth()->user()->hospital->id)
+            ->where('form_patients.branch_id', auth()->user()->branch->id)
+            ->orderBy('patient_privates.name', 'asc')
+            ->get();
         return $patients;
     }
-    //Create patient
+    //Create new patient
     public function create(array $inputs): PatientPrivate
     {
         $patient = PatientPrivate::create([
@@ -38,7 +43,7 @@ class PatientPrivateRepository
         return $patient;
     }
 
-    //Update Specific
+    //Update Specific patient
     public function update(int $id, array $inputs): PatientPrivate
     {
         $patient = $this->show($id);
@@ -49,11 +54,12 @@ class PatientPrivateRepository
         $patient->other_phone = $inputs['other_phone'];
         $patient->quartier = $inputs['quartier'];
         $patient->street = $inputs['street'];
-        $patient->street = $inputs['commune_id'];
+        $patient->commune_id = $inputs['commune_id'];
+        $patient->parcel_number = $inputs['parcel_number'];
         $patient->update();
         return $patient;
     }
-    //Delete role
+    //Delete Specific patient
     public function delete(int $id): bool
     {
         $patient = $this->show($id);
