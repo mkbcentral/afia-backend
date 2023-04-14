@@ -111,6 +111,7 @@ class ApiPatientSubscribeController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
         try {
+
             $inputs['name'] = $request->name;
             $inputs['gender'] = $request->gender;
             $inputs['data_of_birth'] = $request->data_of_birth;
@@ -118,6 +119,7 @@ class ApiPatientSubscribeController extends Controller
             $inputs['other_phone'] = $request->other_phone;
             $inputs['quartier'] = $request->quartier;
             $inputs['parcel_number'] = $request->parcel_number;
+            $inputs['street'] = $request->street;
             $inputs['commune_id'] = $request->commune_id;
             $inputs['company_id'] = $request->company_id;
             $inputs['patient_type_id'] = $request->patient_type_id;
@@ -125,7 +127,7 @@ class ApiPatientSubscribeController extends Controller
             $response = [
                 'success' => true,
                 'message' => 'Patient updated successfull',
-                'patient$patient' => new PatientSubscribeResource($patient)
+                'patient' => new PatientSubscribeResource($patient)
             ];
             return response()->json($response, 200);
         } catch (Exception $ex) {

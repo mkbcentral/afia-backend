@@ -14,7 +14,7 @@ class AgentPatientRepository
             ->select('agent_patients.*', 'form_patients.*')
             ->where('form_patients.hospital_id', auth()->user()->hospital->id)
             ->where('form_patients.branch_id', auth()->user()->branch->id)
-            ->orderBy('agent_patients.name', 'asc')
+            ->orderBy('form_patients.number', 'DESC')
             ->get();
         return $patients;
     }

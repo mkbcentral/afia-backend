@@ -11,10 +11,10 @@ class PatientSubscribeRepository
     public function get()
     {
         $patients = PatientSubscribe::join('form_patients', 'form_patients.id', '=', 'patient_subscribes.form_patient_id')
-            ->select('patient_subscribes.*', 'form_patients.*')
+            ->select('patient_subscribes.*')
             ->where('form_patients.hospital_id', auth()->user()->hospital->id)
             ->where('form_patients.branch_id', auth()->user()->branch->id)
-            ->orderBy('patient_subscribes.name', 'asc')
+            ->orderBy('form_patients.number', 'DESC')
             ->get();
         return $patients;
     }

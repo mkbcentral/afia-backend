@@ -12,10 +12,10 @@ class PatientPrivateRepository
     public function get()
     {
         $patients = PatientPrivate::join('form_patients', 'form_patients.id', '=', 'patient_privates.form_patient_id')
-            ->select('patient_privates.*', 'form_patients.*')
+            ->select('patient_privates.*')
             ->where('form_patients.hospital_id', auth()->user()->hospital->id)
             ->where('form_patients.branch_id', auth()->user()->branch->id)
-            ->orderBy('patient_privates.name', 'asc')
+            ->orderBy('form_patients.number', 'DESC')
             ->get();
         return $patients;
     }

@@ -39,8 +39,8 @@ class PatientSubscribe extends Model
         return $this->belongsTo(Company::class, 'company_id');
     }
 
-    public function type(): BelongsTo
+    public function patientType(): BelongsTo
     {
-        return $this->belongsTo(PatientType::class, 'patient_id');
+        return $this->belongsTo(PatientType::class, 'patient_type_id');
     }
 }

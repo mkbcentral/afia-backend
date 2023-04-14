@@ -16,15 +16,20 @@ class PatientSubscribeResource extends JsonResource
     {
         return [
             'id'=>$this->id,
+            'number'=>$this->formPatient->number,
             'name'=>$this->name,
             'gender'=>$this->gender,
             'data_of_birth'=>$this->data_of_birth,
             'phone'=>$this->phone,
-            'other_phone'=>$this->other_phonen,
+            'other_phone'=>$this->other_phone,
             'quartier'=>$this->quartier,
+            'parcel_number'=>$this->parcel_number,
             'street'=>$this->street,
+            'company_name'=>$this->company->name,
+            'type_name'=>$this->patientType->name,
             'commune'=>new CommuneResource($this->commune),
             'company'=>new CompanyResource($this->company),
+            'type'=>new PatientTypeResource($this->patientType),
             'form'=>new FormPatientResource($this->formPatient),
         ];
     }
