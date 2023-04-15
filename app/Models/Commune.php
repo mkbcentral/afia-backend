@@ -10,7 +10,7 @@ class Commune extends Model
 {
     use HasFactory;
     protected $fillable=[
-        'name',
+        'name','hospital_id'
     ];
 
     public function patientSubscribers(): HasMany

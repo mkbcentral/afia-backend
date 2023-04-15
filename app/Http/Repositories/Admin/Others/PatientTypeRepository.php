@@ -8,7 +8,7 @@ class PatientTypeRepository{
     public function get()
     {
         $types = PatientType::orderBy('name', 'asc')
-        //->where('hospital_id', auth()->user()->hospital->id)
+        ->where('hospital_id', auth()->user()->hospital->id)
         ->get();
         return $types;
     }

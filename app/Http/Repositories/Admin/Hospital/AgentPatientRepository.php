@@ -11,7 +11,7 @@ class AgentPatientRepository
     public function get()
     {
         $patients = AgentPatient::join('form_patients', 'form_patients.id', '=', 'agent_patients.form_patient_id')
-            ->select('agent_patients.*', 'form_patients.*')
+            ->select('agent_patients.*')
             ->where('form_patients.hospital_id', auth()->user()->hospital->id)
             ->where('form_patients.branch_id', auth()->user()->branch->id)
             ->orderBy('form_patients.number', 'DESC')

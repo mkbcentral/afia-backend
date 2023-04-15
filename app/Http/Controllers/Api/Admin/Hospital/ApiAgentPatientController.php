@@ -116,7 +116,7 @@ class ApiAgentPatientController extends Controller
             $inputs['street'] = $request->street;
             $inputs['parcel_number'] = $request->parcel_number;
             $inputs['commune_id'] = $request->commune_id;
-            $inputs['company_id'] = $request->company_id;
+            $inputs['agent_service_id'] = $request->agent_service_id;
             $inputs['patient_type_id'] = $request->patient_type_id;
             $patient = (new AgentPatientRepository())->update($id, $inputs);
             $response = [

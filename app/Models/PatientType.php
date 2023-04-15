@@ -11,7 +11,7 @@ class PatientType extends Model
     use HasFactory;
 
     protected $fillable=[
-        'name',
+        'name','hospital_id'
     ];
 
     public function patientSubscribers(): HasMany

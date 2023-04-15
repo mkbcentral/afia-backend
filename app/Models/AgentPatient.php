@@ -19,8 +19,8 @@ class AgentPatient extends Model
         'quartier',
         'street',
         'parcel_number',
-        'agent_patient_id',
         'agent_service_id',
+        'patient_type_id',
         'form_patient_id'
     ];
 
@@ -41,6 +41,6 @@ class AgentPatient extends Model
 
     public function type(): BelongsTo
     {
-        return $this->belongsTo(PatientType::class, 'patient_id');
+        return $this->belongsTo(PatientType::class, 'patient_type_id');
     }
 }

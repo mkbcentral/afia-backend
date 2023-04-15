@@ -28,6 +28,7 @@ class PatientSubscribeRepository
             'phone' => $inputs['phone'],
             'other_phone' => $inputs['other_phone'],
             'quartier' => $inputs['quartier'],
+            'parcel_number' => $inputs['parcel_number'],
             'street' => $inputs['street'],
             'commune_id' => $inputs['commune_id'],
             'patient_type_id' => $inputs['patient_type_id'],

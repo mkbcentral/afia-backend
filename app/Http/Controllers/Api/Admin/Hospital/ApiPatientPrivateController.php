@@ -48,14 +48,13 @@ class ApiPatientPrivateController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
         try {
-            $date=(new DateFormatHelper())->formatDate($request->data_of_birth);
             //Create first form
             $inputs['number'] = (new FormPatientNumberFormat())->getFormPrivateNumber();
             $form = (new FormPatientRepository())->create($inputs);
             //Create Patient
             $inputs['name'] = $request->name;
             $inputs['gender'] = $request->gender;
-            $inputs['data_of_birth'] = $date;
+            $inputs['data_of_birth'] = $request->data_of_birth;
             $inputs['phone'] = $request->phone;
             $inputs['other_phone'] = $request->other_phone;
             $inputs['commune_id'] = $request->commune_id;
@@ -91,7 +90,7 @@ class ApiPatientPrivateController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, int $id)
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
@@ -108,11 +107,10 @@ class ApiPatientPrivateController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
         try {
-            $date=(new DateFormatHelper())->formatDate($request->data_of_birth);
             //Update Patient
             $inputs['name'] = $request->name;
             $inputs['gender'] = $request->gender;
-            $inputs['data_of_birth'] = $date;
+            $inputs['data_of_birth'] = $request->data_of_birth;
             $inputs['phone'] = $request->phone;
             $inputs['other_phone'] = $request->other_phone;
             $inputs['parcel_number'] = $request->parcel_number;
@@ -129,6 +127,7 @@ class ApiPatientPrivateController extends Controller
         } catch (Exception $ex) {
             return response()->json(['errors' => $ex->getMessage()]);
         }
+
     }
 
     /**
