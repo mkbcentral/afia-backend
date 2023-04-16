@@ -11,10 +11,10 @@ class DateFormatHelper{
     // Get Age of users
     public function getUserAge($date){
         $count_month=0;
-        $age=date('Y') - Carbon::createFromFormat('d/m/Y', $date)->format('Y');
+        $age=date('Y') - Carbon::createFromFormat('Y-m-d', $date)->format('Y');
         if ($age==0) {
             $months=array();
-            $month=Carbon::createFromFormat('d/m/Y', $date)->format('m');
+            $month=Carbon::createFromFormat('Y-m-d', $date)->format('m');
             if ($month<10) {
                 $month=ltrim($month, "0");
              }
@@ -29,7 +29,7 @@ class DateFormatHelper{
             $days_numbers= cal_days_in_month(CAL_GREGORIAN, $month, date('Y'));
             if ($count_month == 1) {
                 if ($days_numbers<31 OR $days_numbers<30) {
-                    $day=Carbon::createFromFormat('d/m/Y', $date)->format('d');
+                    $day=Carbon::createFromFormat('Y-m-d', $date)->format('d');
                     $days=array();
                     if($day<9){
                         $day=ltrim($day,"0");

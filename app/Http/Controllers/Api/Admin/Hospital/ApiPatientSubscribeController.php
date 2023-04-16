@@ -112,7 +112,6 @@ class ApiPatientSubscribeController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
         try {
-
             $inputs['name'] = $request->name;
             $inputs['gender'] = $request->gender;
             $inputs['data_of_birth'] = $request->data_of_birth;
@@ -150,6 +149,18 @@ class ApiPatientSubscribeController extends Controller
             ];
             $patient->formPatient->delete();
             return response()->json($response);
+        } catch (Exception $ex) {
+            return response()->json(['errors' => $ex->getMessage()]);
+        }
+    }
+
+    //Search user
+    public function searchPatient()
+    {
+        $searchQuery = request('query');
+        try {
+            $patients = (new PatientSubscribeRepository())->search($searchQuery);
+            return PatientSubscribeResource::collection($patients);
         } catch (Exception $ex) {
             return response()->json(['errors' => $ex->getMessage()]);
         }

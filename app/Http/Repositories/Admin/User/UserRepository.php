@@ -12,7 +12,7 @@ class UserRepository
     {
         $users = User::query()
             ->orderBy('name', 'asc')
-            //->where('hospital_id', auth()->user()->hospital->id)
+            ->where('hospital_id', auth()->user()->hospital->id)
             ->paginate(3);
         return $users;
     }

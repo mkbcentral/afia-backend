@@ -148,4 +148,15 @@ class ApiPatientPrivateController extends Controller
             return response()->json(['errors' => $ex->getMessage()]);
         }
     }
+
+    //Search user
+    public function searchPatient(){
+        $searchQuery=request('query');
+        try {
+            $patients= (new PatientPrivateRepository())->search($searchQuery);
+            return PatientPrivateResource::collection($patients);
+        } catch (Exception $ex) {
+            return response()->json(['errors' => $ex->getMessage()]);
+        }
+    }
 }

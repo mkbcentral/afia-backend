@@ -11,12 +11,13 @@ class PatientPrivateRepository
     //Get all patients
     public function get()
     {
+        $page=request('page_page');
         $patients = PatientPrivate::join('form_patients', 'form_patients.id', '=', 'patient_privates.form_patient_id')
             ->select('patient_privates.*')
             ->where('form_patients.hospital_id', auth()->user()->hospital->id)
             ->where('form_patients.branch_id', auth()->user()->branch->id)
             ->orderBy('form_patients.number', 'DESC')
-            ->get();
+            ->paginate($page);
         return $patients;
     }
     //Create new patient
@@ -67,5 +68,18 @@ class PatientPrivateRepository
             $status = true;
         }
         return $status;
+    }
+
+    //Search user
+    public function search($query)
+    {
+        $patients = PatientPrivate::join('form_patients', 'form_patients.id', '=', 'patient_privates.form_patient_id')
+            ->select('patient_privates.*')
+            ->where('form_patients.hospital_id', auth()->user()->hospital->id)
+            ->where('form_patients.branch_id', auth()->user()->branch->id)
+            ->orderBy('form_patients.number', 'DESC')
+            ->where('patient_privates.name', 'like', "%{$query}%")
+            ->get();
+        return $patients;
     }
 }

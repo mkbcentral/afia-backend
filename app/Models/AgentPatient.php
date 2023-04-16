@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Repositories\Others\DateFormatHelper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -23,7 +24,9 @@ class AgentPatient extends Model
         'patient_type_id',
         'form_patient_id'
     ];
-
+    public function getAge($date){
+        return (new DateFormatHelper())->getUserAge($date);
+    }
     public function commune(): BelongsTo
     {
         return $this->belongsTo(Commune::class, 'commune_id');

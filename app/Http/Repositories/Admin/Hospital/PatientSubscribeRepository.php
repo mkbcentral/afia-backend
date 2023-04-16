@@ -72,4 +72,17 @@ class PatientSubscribeRepository
         }
         return $status;
     }
+
+    //Search user
+    public function search($query)
+    {
+        $patients = PatientSubscribe::join('form_patients', 'form_patients.id', '=', 'patient_subscribes.form_patient_id')
+            ->select('patient_subscribes.*')
+            ->where('form_patients.hospital_id', auth()->user()->hospital->id)
+            ->where('form_patients.branch_id', auth()->user()->branch->id)
+            ->orderBy('form_patients.number', 'DESC')
+            ->where('patient_subscribes.name', 'like', "%{$query}%")
+            ->get();
+        return $patients;
+    }
 }

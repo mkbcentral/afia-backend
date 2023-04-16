@@ -71,4 +71,17 @@ class AgentPatientRepository
         }
         return $status;
     }
+
+    //Search user
+    public function search($query)
+    {
+        $patients = AgentPatient::join('form_patients', 'form_patients.id', '=', 'agent_patients.form_patient_id')
+            ->select('agent_patients.*')
+            ->where('form_patients.hospital_id', auth()->user()->hospital->id)
+            ->where('form_patients.branch_id', auth()->user()->branch->id)
+            ->orderBy('form_patients.number', 'DESC')
+            ->where('agent_patients.name', 'like', "%{$query}%")
+            ->get();
+        return $patients;
+    }
 }

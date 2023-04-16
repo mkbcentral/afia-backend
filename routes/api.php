@@ -60,5 +60,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //Search routes
     Route::get('/users/search',[ApiUserController::class,'searchUser']);
+    Route::get('/patient/private/search/',[ApiPatientPrivateController::class,'searchPatient']);
+    Route::get('/patient/subscribe/search/',[ApiPatientSubscribeController::class,'searchPatient']);
+    Route::get('/agent/patient/search/',[ApiAgentPatientController::class,'searchPatient']);
 
 });
