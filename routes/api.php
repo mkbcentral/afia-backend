@@ -12,6 +12,9 @@ use App\Http\Controllers\Api\Admin\Others\ApiCompanyController;
 use App\Http\Controllers\Api\Admin\Others\ApiCurrencyController;
 use App\Http\Controllers\Api\Admin\Others\ApiPatientTypeController;
 use App\Http\Controllers\Api\Admin\Others\ApiRateController;
+use App\Http\Controllers\Api\Admin\Tarification\ApiCategoaryTarificationController;
+use App\Http\Controllers\Api\Admin\Tarification\ApiConsultationController;
+use App\Http\Controllers\Api\Admin\Tarification\ApiTarificationController;
 use App\Http\Controllers\Api\Admin\User\ApiRoleController;
 use App\Http\Controllers\Api\Admin\User\ApiUserController;
 use App\Http\Controllers\Api\Auth\LogingController;
@@ -32,7 +35,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::post('login', LogingController::class);
-
+Route::get('/rate/current',[ApiRateController::class,'getCurrentRate']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::resource('role', ApiRoleController::class);
     Route::resource('user', ApiUserController::class);
@@ -48,6 +51,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('patient-type', ApiPatientTypeController::class);
     Route::resource('rate', ApiRateController::class);
     Route::resource('currency', ApiCurrencyController::class);
+    Route::resource('tarifiaction', ApiTarificationController::class);
+    Route::resource('category-tarification', ApiCategoaryTarificationController::class);
+    Route::resource('consultation', ApiConsultationController::class);
 
     //Change status routes
     Route::put('/branch/status/{id}', [ApiBranchController::class, 'changeStatus']);
@@ -57,6 +63,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/hospital/logo/{id}', [ApiHospitalController::class, 'updateLogo']);
     Route::put('/subscription/status/{id}', [ApiSubscriptionController::class, 'changeStatus']);
     Route::put('/rate/status/{id}', [ApiRateController::class, 'changeStatus']);
+    Route::put('/tarifiaction/status/{id}', [ApiTarificationController::class, 'changeStatus']);
+    Route::put('/consultation/status/{id}', [ApiConsultationController::class, 'changeStatus']);
 
     //Search routes
     Route::get('/users/search',[ApiUserController::class,'searchUser']);
@@ -64,4 +72,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/patient/subscribe/search/',[ApiPatientSubscribeController::class,'searchPatient']);
     Route::get('/agent/patient/search/',[ApiAgentPatientController::class,'searchPatient']);
 
+    //Get current rate route
+    //Route::get('/rate/current',[ApiRateController::class,'getCurrentRate']);
+
 });
+

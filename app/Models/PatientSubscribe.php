@@ -13,7 +13,7 @@ class PatientSubscribe extends Model
     protected $fillable = [
         'name',
         'gender',
-        'data_of_birth',
+        'date_of_birth',
         'phone',
         'other_phone',
         'commune_id',

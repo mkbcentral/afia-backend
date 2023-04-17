@@ -10,12 +10,13 @@ class PatientSubscribeRepository
     //Get all patient
     public function get()
     {
+        $page=request('page_page');
         $patients = PatientSubscribe::join('form_patients', 'form_patients.id', '=', 'patient_subscribes.form_patient_id')
             ->select('patient_subscribes.*')
             ->where('form_patients.hospital_id', auth()->user()->hospital->id)
             ->where('form_patients.branch_id', auth()->user()->branch->id)
             ->orderBy('form_patients.number', 'DESC')
-            ->get();
+            ->paginate($page);
         return $patients;
     }
     //Create patient
@@ -24,7 +25,7 @@ class PatientSubscribeRepository
         $patient = PatientSubscribe::create([
             'name' => $inputs['name'],
             'gender' => $inputs['gender'],
-            'data_of_birth' => $inputs['data_of_birth'],
+            'date_of_birth' => $inputs['date_of_birth'],
             'phone' => $inputs['phone'],
             'other_phone' => $inputs['other_phone'],
             'quartier' => $inputs['quartier'],
@@ -33,7 +34,7 @@ class PatientSubscribeRepository
             'commune_id' => $inputs['commune_id'],
             'patient_type_id' => $inputs['patient_type_id'],
             'company_id' => $inputs['company_id'],
-            'form_patient_id' => $inputs['form_patient_id'],
+            'registration_number' => $inputs['registration_number'],
         ]);
         return $patient;
     }
@@ -50,7 +51,7 @@ class PatientSubscribeRepository
         $patient = $this->show($id);
         $patient->name = $inputs['name'];
         $patient->gender = $inputs['gender'];
-        $patient->data_of_birth = $inputs['data_of_birth'];
+        $patient->date_of_birth = $inputs['date_of_birth'];
         $patient->phone = $inputs['phone'];
         $patient->other_phone = $inputs['other_phone'];
         $patient->quartier = $inputs['quartier'];
@@ -59,7 +60,7 @@ class PatientSubscribeRepository
         $patient->commune_id = $inputs['commune_id'];
         $patient->patient_type_id = $inputs['patient_type_id'];
         $patient->company_id = $inputs['company_id'];
-
+        $patient->registration_number = $inputs['registration_number'];
         $patient->update();
         return $patient;
     }

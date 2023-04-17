@@ -18,9 +18,10 @@ return new class extends Migration
     {
         Schema::create('patient_subscribes', function (Blueprint $table) {
             $table->id();
+            $table->string('registration_number',255)->default(0);
             $table->string('name',255);
             $table->enum('gender',['F','M'])->nullable();
-            $table->date('data_of_birth')->nullable();
+            $table->date('date_of_birth')->nullable();
             $table->string('phone',20)->nullable();
             $table->string('other_phone',20)->nullable();
             $table->foreignIdFor(Commune::class)->nullable()->constrained();

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name',255);
             $table->enum('gender',['F','M'])->nullable();
-            $table->date('data_of_birth')->nullable();
+            $table->date('date_of_birth')->nullable();
             $table->string('phone',20)->nullable();
             $table->string('other_phone',20)->nullable();
             $table->foreignIdFor(Commune::class)->nullable()->constrained();

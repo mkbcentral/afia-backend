@@ -26,14 +26,13 @@ class PatientPrivateRepository
         $patient = PatientPrivate::create([
             'name' => $inputs['name'],
             'gender' => $inputs['gender'],
-            'data_of_birth' => $inputs['data_of_birth'],
+            'date_of_birth' => $inputs['date_of_birth'],
             'phone' => $inputs['phone'],
             'other_phone' => $inputs['other_phone'],
             'quartier' => $inputs['quartier'],
             'street' => $inputs['street'],
             'parcel_number' => $inputs['parcel_number'],
-            'commune_id' => $inputs['commune_id'],
-            'form_patient_id' => $inputs['form_patient_id'],
+            'commune_id' => $inputs['commune_id']
         ]);
         return $patient;
     }
@@ -50,7 +49,7 @@ class PatientPrivateRepository
         $patient = $this->show($id);
         $patient->name = $inputs['name'];
         $patient->gender = $inputs['gender'];
-        $patient->data_of_birth = $inputs['data_of_birth'];
+        $patient->date_of_birth = $inputs['date_of_birth'];
         $patient->phone = $inputs['phone'];
         $patient->other_phone = $inputs['other_phone'];
         $patient->quartier = $inputs['quartier'];

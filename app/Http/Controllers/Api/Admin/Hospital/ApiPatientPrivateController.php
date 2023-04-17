@@ -5,13 +5,11 @@ namespace App\Http\Controllers\Api\Admin\Hospital;
 use App\Http\Controllers\Controller;
 use App\Http\Repositories\Admin\Hospital\FormPatientRepository;
 use App\Http\Repositories\Admin\Hospital\PatientPrivateRepository;
-use App\Http\Repositories\Others\DateFormatHelper;
 use App\Http\Repositories\Others\FormPatientNumberFormat;
+use App\Http\Requests\PatientPrivateRequest;
 use App\Http\Resources\PatientPrivateResource;
-use App\Http\Resources\PatientTypeResource;
 use Exception;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+
 
 class ApiPatientPrivateController extends Controller
 {
@@ -31,43 +29,33 @@ class ApiPatientPrivateController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(PatientPrivateRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string',
-            'gender' => 'required|string',
-            'data_of_birth' => 'required',
-            'phone' => 'nullable|string',
-            'other_phone' => 'nullable|string',
-            'quartier' => 'nullable|string',
-            'parcel_number' => 'nullable|numeric',
-            'street' => 'nullable|string',
-            'commune_id' => 'required|numeric',
-        ]);
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
         try {
             //Create first form
             $inputs['number'] = (new FormPatientNumberFormat())->getFormPrivateNumber();
-            $form = (new FormPatientRepository())->create($inputs);
+
             //Create Patient
             $inputs['name'] = $request->name;
             $inputs['gender'] = $request->gender;
-            $inputs['data_of_birth'] = $request->data_of_birth;
+            $inputs['date_of_birth'] = $request->date_of_birth;
             $inputs['phone'] = $request->phone;
             $inputs['other_phone'] = $request->other_phone;
             $inputs['commune_id'] = $request->commune_id;
             $inputs['parcel_number'] = $request->parcel_number;
             $inputs['quartier'] = $request->quartier;
             $inputs['street'] = $request->street;
-            $inputs['form_patient_id'] = $form->id;
             $patient = (new PatientPrivateRepository())->create($inputs);
-            $response = [
-                'success' => true,
-                'message' => 'Patient added successfull',
-                'patient' => new PatientPrivateResource($patient)
-            ];
+            if ($patient) {
+                $form = (new FormPatientRepository())->create($inputs);
+                $patient->form_patient_id=$form->id;
+                $patient->update();
+                $response = [
+                    'success' => true,
+                    'message' => 'Patient added successfull',
+                    'patient' => new PatientPrivateResource($patient)
+                ];
+            }
             return response()->json($response, 200);
         } catch (Exception $ex) {
             return response()->json(['errors' => $ex->getMessage()]);
@@ -90,27 +78,13 @@ class ApiPatientPrivateController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, int $id)
+    public function update(PatientPrivateRequest $request, int $id)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string',
-            'gender' => 'required|string',
-            'data_of_birth' => 'required',
-            'phone' => 'nullable|string',
-            'other_phone' => 'nullable|string',
-            'quartier' => 'nullable|string',
-            'street' => 'nullable|string',
-            'parcel_number' => 'nullable|numeric',
-            'commune_id' => 'required|numeric',
-        ]);
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
         try {
             //Update Patient
             $inputs['name'] = $request->name;
             $inputs['gender'] = $request->gender;
-            $inputs['data_of_birth'] = $request->data_of_birth;
+            $inputs['date_of_birth'] = $request->date_of_birth;
             $inputs['phone'] = $request->phone;
             $inputs['other_phone'] = $request->other_phone;
             $inputs['parcel_number'] = $request->parcel_number;

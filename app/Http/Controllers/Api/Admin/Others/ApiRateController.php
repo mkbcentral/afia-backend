@@ -104,7 +104,7 @@ class ApiRateController extends Controller
             return response()->json(['errors' => $ex->getMessage()]);
         }
     }
-
+    //Change Status
     public function changeStatus(int $id)
     {
         try {
@@ -119,4 +119,20 @@ class ApiRateController extends Controller
             return response()->json(['errors' => $ex->getMessage()]);
         }
     }
+    //Get current rate
+    public function getCurrentRate()
+    {
+        try {
+            $rate = (new RateRepository())->getCurrentRate();
+            $response = [
+                'success' => true,
+                'rate'=>new RateResource($rate),
+            ];
+            return response()->json($response);
+        } catch (Exception $ex) {
+            return response()->json(['errors' => $ex->getMessage()]);
+        }
+    }
+
+
 }

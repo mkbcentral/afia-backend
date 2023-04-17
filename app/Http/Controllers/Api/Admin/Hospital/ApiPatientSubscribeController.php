@@ -5,12 +5,10 @@ namespace App\Http\Controllers\Api\Admin\Hospital;
 use App\Http\Controllers\Controller;
 use App\Http\Repositories\Admin\Hospital\FormPatientRepository;
 use App\Http\Repositories\Admin\Hospital\PatientSubscribeRepository;
-use App\Http\Repositories\Others\DateFormatHelper;
 use App\Http\Repositories\Others\FormPatientNumberFormat;
+use App\Http\Requests\PatientSubscribeRequest;
 use App\Http\Resources\PatientSubscribeResource;
 use Exception;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
 class ApiPatientSubscribeController extends Controller
 {
@@ -30,32 +28,17 @@ class ApiPatientSubscribeController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(PatientSubscribeRequest $request)
     {
 
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string',
-            'gender' => 'required|string',
-            'data_of_birth' => 'required|date',
-            'phone' => 'nullable|string',
-            'other_phone' => 'nullable|string',
-            'quartier' => 'nullable|string',
-            'parcel_number' => 'nullable|numeric',
-            'street' => 'nullable|string',
-            'compny_id' => 'nullable|numeric',
-            'patient_type_id' => 'nullable|numeric',
-        ]);
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
         try {
             //Create first form
             $inputs['number'] = (new FormPatientNumberFormat())->getFormPrivateNumber();
-            $form = (new FormPatientRepository())->create($inputs);
+
             //Create Patient
             $inputs['name'] = $request->name;
             $inputs['gender'] = $request->gender;
-            $inputs['data_of_birth'] = $request->data_of_birth;
+            $inputs['date_of_birth'] = $request->date_of_birth;
             $inputs['phone'] = $request->phone;
             $inputs['other_phone'] = $request->other_phone;
             $inputs['quartier'] = $request->quartier;
@@ -64,17 +47,24 @@ class ApiPatientSubscribeController extends Controller
             $inputs['commune_id'] = $request->commune_id;
             $inputs['company_id'] = $request->company_id;
             $inputs['patient_type_id'] = $request->patient_type_id;
-            $inputs['form_patient_id'] = $form->id;
+            $inputs['registration_number'] = $request->registration_number;
             $patient = (new PatientSubscribeRepository())->create($inputs);
-            $response = [
-                'success' => true,
-                'message' => 'Patient added successfull',
-                'patient' => new PatientSubscribeResource($patient)
-            ];
+            if ($patient) {
+                $form = (new FormPatientRepository())->create($inputs);
+                $patient->form_patient_id=$form->id;
+                $patient->update();
+                $response = [
+                    'success' => true,
+                    'message' => 'Patient added successfull',
+                    'patient' => new PatientSubscribeResource($patient)
+                ];
+            }
             return response()->json($response, 200);
         } catch (Exception $ex) {
             return response()->json(['errors' => $ex->getMessage()]);
         }
+
+
     }
 
     /**
@@ -94,27 +84,12 @@ class ApiPatientSubscribeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(PatientSubscribeRequest $request, string $id)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string',
-            'gender' => 'required|string',
-            'data_of_birth' => 'required|date',
-            'phone' => 'nullable|string',
-            'other_phone' => 'nullable|string',
-            'quartier' => 'nullable|string',
-            'parcel_number' => 'nullable|numeric',
-            'street' => 'nullable|string',
-            'compny_id' => 'nullable|numeric',
-            'patient_type_id' => 'nullable|numeric',
-        ]);
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
         try {
             $inputs['name'] = $request->name;
             $inputs['gender'] = $request->gender;
-            $inputs['data_of_birth'] = $request->data_of_birth;
+            $inputs['date_of_birth'] = $request->date_of_birth;
             $inputs['phone'] = $request->phone;
             $inputs['other_phone'] = $request->other_phone;
             $inputs['quartier'] = $request->quartier;
@@ -123,6 +98,7 @@ class ApiPatientSubscribeController extends Controller
             $inputs['commune_id'] = $request->commune_id;
             $inputs['company_id'] = $request->company_id;
             $inputs['patient_type_id'] = $request->patient_type_id;
+            $inputs['registration_number'] = $request->registration_number;
             $patient = (new PatientSubscribeRepository())->update($id, $inputs);
             $response = [
                 'success' => true,

@@ -59,4 +59,9 @@ class RateRepository
         $rate->update();
         return $rate;
     }
+    //Get current rate
+    public function getCurrentRate():Rate{
+        $rate=Rate::where('status',true)->first();
+        return $rate;
+    }
 }
