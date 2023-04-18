@@ -24,9 +24,9 @@ class TarificationRequest extends FormRequest
         return [
             'name' => 'required|string',
             'abreviation' => 'nullable|string',
-            'price_private' => 'numeric|string',
-            'price_subscribe' => 'numeric|string',
-            'category_tarification_id' => 'numeric|string',
+            'price_private' => 'required|numeric',
+            'price_subscribe' => 'required|numeric',
+
         ];
     }
 }

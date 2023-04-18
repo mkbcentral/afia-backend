@@ -20,6 +20,9 @@ class ConsultationResource extends JsonResource
             'price_private'=>$this->price_private,
             'price_subscribe'=>$this->price_subscribe,
             'hospital'=>new HospitalResource($this->hospital),
+            'status'=>$this->status,
+            'starus_name'=>$this->status==true?'ENABLE':'DISABLE',
+            'color_status'=>$this->status==true?'primary':'danger',
         ];
     }
 }

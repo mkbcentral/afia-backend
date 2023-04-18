@@ -67,14 +67,13 @@ class ApiTarificationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(TarificationRequest $request, string $id)
+    public function update(TarificationRequest $request, int $id)
     {
         try {
             $inputs['name'] = $request->name;
             $inputs['abreviation'] = $request->abreviation;
             $inputs['price_private'] = $request->price_private;
             $inputs['price_subscribe'] = $request->price_subscribe;
-            $inputs['category_tarification_id'] = $request->category_tarification_id;
             $tarification = (new TarificationRepository())->update($id, $inputs);
             $response = [
                 'success' => true,
@@ -119,4 +118,5 @@ class ApiTarificationController extends Controller
             return response()->json(['errors' => $ex->getMessage()]);
         }
     }
+
 }

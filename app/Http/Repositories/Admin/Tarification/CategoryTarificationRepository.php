@@ -46,4 +46,8 @@ class CategoryTarificationRepository
         }
         return $status;
     }
+
+    public function first():CategoryTarification{
+        return CategoryTarification::orderBy('id','ASC')->first();
+    }
 }

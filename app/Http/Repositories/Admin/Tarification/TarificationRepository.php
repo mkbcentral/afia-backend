@@ -30,14 +30,15 @@ class TarificationRepository
         return Tarification::find($id);
     }
     //Update specific tarification
-    public function update(int $id,array $inputs){
+    public function update(int $id,array $inputs):Tarification{
         $tarification=$this->show($id);
         $tarification->name=$inputs['name'];
         $tarification->abreviation=$inputs['abreviation'];
         $tarification->price_private=$inputs['price_private'];
         $tarification->price_subscribe=$inputs['price_subscribe'];
-        $tarification->category_tarification_id=$inputs['category_tarification_id'];
         $tarification->update();
+
+        return $tarification;
     }
     //Delete specific tarification
     public function delete($id): bool

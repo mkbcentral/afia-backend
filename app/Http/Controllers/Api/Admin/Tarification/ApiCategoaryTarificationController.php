@@ -94,4 +94,18 @@ class ApiCategoaryTarificationController extends Controller
             return response()->json(['errors' => $ex->getMessage()]);
         }
     }
+
+    public function getFirstRecord()
+    {
+        try {
+            $category=(new CategoryTarificationRepository())->first();
+            $response = [
+                'success' => true,
+                'category'=>$category
+            ];
+            return response()->json($response);
+        } catch (Exception $ex) {
+            return response()->json(['errors' => $ex->getMessage()]);
+        }
+    }
 }
