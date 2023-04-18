@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Api\Admin\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Repositories\Admin\User\UserRepository;
+use App\Http\Requests\UserResquest;
 use App\Http\Resources\UserResource;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
 class ApiUserController extends Controller
 {
@@ -27,25 +27,14 @@ class ApiUserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(UserResquest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string',
-            'email' => 'required|email|unique:users,email',
-            'phone' => 'required|unique:users,phone',
-            'role_id' => 'required|numeric',
-            'branch_id' => 'required|numeric',
-        ]);
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
         try {
             $inputs['name'] = $request->name;
             $inputs['email'] = $request->email;
             $inputs['phone'] = $request->phone;
             $inputs['password'] = '123456';
             $inputs['role_id'] = $request->role_id;
-            $inputs['branch_id'] = $request->branch_id;
             $user=(new UserRepository())->create($inputs);
             $response = [
                 'success' => true,
@@ -74,7 +63,7 @@ class ApiUserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, int $id)
+    public function update(UserResquest $request, int $id)
     {
         try {
             $inputs['name'] = $request->name;

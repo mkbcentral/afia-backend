@@ -10,10 +10,11 @@ class UserRepository
     //Get all User
     public function get()
     {
+        $page=request('page_page');
         $users = User::query()
             ->orderBy('name', 'asc')
             ->where('hospital_id', auth()->user()->hospital->id)
-            ->paginate(3);
+            ->paginate($page);
         return $users;
     }
     //Create User
@@ -26,7 +27,7 @@ class UserRepository
             'password' => Hash::make($inputs['password']),
             'hospital_id' =>  auth()->user()->hospital->id,
             'role_id' => $inputs['role_id'],
-            'branch_id' => $inputs['branch_id']
+            'branch_id' => auth()->user()->branch->id,
         ]);
         return $user;
     }
