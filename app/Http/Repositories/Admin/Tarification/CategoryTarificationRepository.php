@@ -9,7 +9,9 @@ class CategoryTarificationRepository
     //Get all categories
     public function get()
     {
-        return CategoryTarification::where('hospital_id', auth()->user()->hospital->id)->get();
+        return CategoryTarification::where('hospital_id', auth()->user()->hospital->id)
+            ->with(['tarifications'])
+            ->get();
     }
     //Create new category
     public function create(array $inputs): CategoryTarification

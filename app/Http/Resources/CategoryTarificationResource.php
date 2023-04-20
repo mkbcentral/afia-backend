@@ -18,6 +18,7 @@ class CategoryTarificationResource extends JsonResource
             'id'=>$this->id,
             'name'=>$this->name,
             'hospital'=>new HospitalResource($this->hospital),
+            'tarifs'=>$this->tarifications,
         ];
     }
 }

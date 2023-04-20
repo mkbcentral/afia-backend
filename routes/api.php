@@ -36,7 +36,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::post('login', LogingController::class);
-Route::get('/rate/current',[ApiRateController::class,'getCurrentRate']);
+
+Route::controller(AppController::class)->group(function(){
+    Route::get('/test','test');
+});
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::resource('role', ApiRoleController::class);
     Route::resource('user', ApiUserController::class);
@@ -72,12 +76,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/patient/private/search/',[ApiPatientPrivateController::class,'searchPatient']);
     Route::get('/patient/subscribe/search/',[ApiPatientSubscribeController::class,'searchPatient']);
     Route::get('/agent/patient/search/',[ApiAgentPatientController::class,'searchPatient']);
-
     //Get first record routes
     Route::get('first-category-rarif', [ApiCategoaryTarificationController::class, 'getFirstRecord']);
-
     //Get current rate route
-    //Route::get('first-category-rarif',[ApiRateController::class,'getCurrentRate']);
+    Route::get('current-rate',[ApiRateController::class,'getCurrentRate']);
+    //Request consultation route
+    Route::post('/private-resquest-consultation',[ApiPatientPrivateController::class,'makeConsultation']);
+    Route::post('/subscribe-resquest-consultation',[ApiPatientSubscribeController::class,'makeConsultation']);
+    Route::post('/agent-resquest-consultation',[ApiAgentPatientController::class,'makeConsultation']);
 
 });
 

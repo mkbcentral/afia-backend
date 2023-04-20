@@ -11,6 +11,7 @@ class TarificationRepository
     {
         return Tarification::where('hospital_id', auth()->user()->hospital->id)
             ->where('category_tarification_id',$catId)
+            ->where('status',true)
             ->get();
     }
     //Create new tarification

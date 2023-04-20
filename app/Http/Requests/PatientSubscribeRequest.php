@@ -33,6 +33,7 @@ class PatientSubscribeRequest extends FormRequest
             'commune_id' => 'required|numeric',
             'company_id' => 'required|numeric',
             'patient_type_id' => 'required|numeric',
+            'consultation_id' => 'required|numeric',
         ];
     }
 }

@@ -5,11 +5,14 @@ namespace App\Http\Controllers\Api\Admin\Hospital;
 use App\Http\Controllers\Controller;
 use App\Http\Repositories\Admin\Hospital\FormPatientRepository;
 use App\Http\Repositories\Admin\Hospital\PatientPrivateRepository;
+use App\Http\Repositories\Invoices\InvoicePrivateRepository;
 use App\Http\Repositories\Others\FormPatientNumberFormat;
 use App\Http\Requests\PatientPrivateRequest;
 use App\Http\Resources\PatientPrivateResource;
+use App\Models\Currency;
+use App\Models\Rate;
 use Exception;
-
+use Illuminate\Http\Request;
 
 class ApiPatientPrivateController extends Controller
 {
@@ -34,7 +37,8 @@ class ApiPatientPrivateController extends Controller
         try {
             //Create first form
             $inputs['number'] = (new FormPatientNumberFormat())->getFormPrivateNumber();
-
+            $currency=Currency::where('name','CDF')->first();
+            $rate=Rate::where('status',true)->first();
             //Create Patient
             $inputs['name'] = $request->name;
             $inputs['gender'] = $request->gender;
@@ -49,6 +53,8 @@ class ApiPatientPrivateController extends Controller
             if ($patient) {
                 $form = (new FormPatientRepository())->create($inputs);
                 $patient->form_patient_id=$form->id;
+                (new InvoicePrivateRepository())
+                    ->createInvoice(rand(10,100),$form->id,$request->consultation_id,$rate->id,$currency->id);
                 $patient->update();
                 $response = [
                     'success' => true,
@@ -78,7 +84,7 @@ class ApiPatientPrivateController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(PatientPrivateRequest $request, int $id)
+    public function update(Request $request, int $id)
     {
         try {
             //Update Patient
@@ -129,6 +135,30 @@ class ApiPatientPrivateController extends Controller
         try {
             $patients= (new PatientPrivateRepository())->search($searchQuery);
             return PatientPrivateResource::collection($patients);
+        } catch (Exception $ex) {
+            return response()->json(['errors' => $ex->getMessage()]);
+        }
+    }
+    //Request consultation
+    public function makeConsultation(Request $request){
+        try {
+            $currency=Currency::where('name','CDF')->first();
+            $rate=Rate::where('status',true)->first();
+            $invoice=(new InvoicePrivateRepository())->checkPatientExistInvoiceInCurrectMonth($request->form_id);
+            if ($invoice) {
+                $response = [
+                    'success' => false,
+                    'message' => 'This patient already has a cosulation for this month',
+                ];
+            }else{
+                (new InvoicePrivateRepository())
+                ->createInvoice(rand(10,100),$request->form_id,$request->consultation_id,$rate->id,$currency->id);
+                $response = [
+                    'success' => true,
+                    'message' => 'Consultation requested successfull',
+                ];
+            }
+            return response()->json($response);
         } catch (Exception $ex) {
             return response()->json(['errors' => $ex->getMessage()]);
         }

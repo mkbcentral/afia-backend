@@ -32,6 +32,7 @@ class AgentPatientRequest extends FormRequest
             'commune_id' => 'required|numeric',
             'agent_service_id' => 'required|numeric',
             'patient_type_id' => 'required|numeric',
+            'consultation_id' => 'required|numeric',
         ];
     }
 }

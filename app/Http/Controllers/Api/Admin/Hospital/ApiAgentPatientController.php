@@ -5,10 +5,14 @@ namespace App\Http\Controllers\Api\Admin\Hospital;
 use App\Http\Controllers\Controller;
 use App\Http\Repositories\Admin\Hospital\AgentPatientRepository;
 use App\Http\Repositories\Admin\Hospital\FormPatientRepository;
+use App\Http\Repositories\Invoices\AgentInvoiceRepository;
 use App\Http\Repositories\Others\FormPatientNumberFormat;
 use App\Http\Requests\AgentPatientRequest;
 use App\Http\Resources\AgentPatientResource;
+use App\Models\Currency;
+use App\Models\Rate;
 use Exception;
+use Illuminate\Http\Request;
 
 class ApiAgentPatientController extends Controller
 {
@@ -33,7 +37,9 @@ class ApiAgentPatientController extends Controller
         try {
             //Create first form
             $inputs['number']=(new FormPatientNumberFormat())->getFormPrivateNumber();
-            //Create Patient
+            $currency=Currency::where('name','CDF')->first();
+            $rate=Rate::where('status',true)->first();
+
             $inputs['name'] = $request->name;
             $inputs['gender'] = $request->gender;
             $inputs['date_of_birth'] = $request->date_of_birth;
@@ -46,10 +52,17 @@ class ApiAgentPatientController extends Controller
             $inputs['agent_service_id'] = $request->agent_service_id;
             $inputs['patient_type_id'] = $request->patient_type_id;
             $patient = (new AgentPatientRepository())->create($inputs);
-
             if ($patient) {
                 $form=(new FormPatientRepository())->create($inputs);
                 $patient->form_patient_id=$form->id;
+                (new AgentInvoiceRepository())
+                ->createInvoice(
+                    rand(10,100),
+                    $form->id,
+                    $request->consultation_id,
+                    $rate->id,
+                    $currency->id,
+                    $request->agent_service_id);
                 $patient->update();
                 $response = [
                     'success' => true,
@@ -57,6 +70,7 @@ class ApiAgentPatientController extends Controller
                 'patient' => new AgentPatientResource($patient)
                 ];
             }
+
             return response()->json($response, 200);
         } catch (Exception $ex) {
             return response()->json(['errors' => $ex->getMessage()]);
@@ -79,7 +93,7 @@ class ApiAgentPatientController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(AgentPatientRequest $request, int $id)
+    public function update(Request $request, int $id)
     {
         try {
             $inputs['name'] = $request->name;
@@ -135,4 +149,36 @@ class ApiAgentPatientController extends Controller
             return response()->json(['errors' => $ex->getMessage()]);
         }
     }
+    //Rquest consultation
+    public function makeConsultation(Request $request){
+        try {
+            $currency=Currency::where('name','CDF')->first();
+            $rate=Rate::where('status',true)->first();
+            $invoice=(new AgentInvoiceRepository())
+            ->checkPatientExistInvoiceInCurrectMonth($request->form_id,$request->agent_service_id);
+            if ($invoice) {
+                $response = [
+                    'success' => false,
+                    'message' => 'This patient already has a cosulation for this month',
+                ];
+            }else{
+                (new AgentInvoiceRepository())
+                ->createInvoice(
+                    rand(10,100),
+                    $request->form_id,
+                    $request->consultation_id,
+                    $rate->id,
+                    $currency->id,
+                    $request->agent_service_id);
+                $response = [
+                    'success' => true,
+                    'message' => 'Consultation requested successfull',
+                ];
+            }
+            return response()->json($response);
+        } catch (Exception $ex) {
+            return response()->json(['errors' => $ex->getMessage()]);
+        }
+    }
+
 }

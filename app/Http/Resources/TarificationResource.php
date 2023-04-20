@@ -16,7 +16,7 @@ class TarificationResource extends JsonResource
     {
         return [
             'id'=>$this->id,
-            'name'=>$this->name,
+            'name'=>$this->abreviation==null?$this->name:$this->name.' ('.$this->abreviation.')',
             'abreviation'=>$this->abreviation,
             'price_private'=>$this->price_private,
             'price_subscribe'=>$this->price_subscribe,

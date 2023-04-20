@@ -31,6 +31,7 @@ class PatientPrivateRequest extends FormRequest
             'parcel_number' => 'nullable|numeric',
             'street' => 'nullable|string',
             'commune_id' => 'required|numeric',
+            'consultation_id' => 'required|numeric',
         ];
     }
 }
