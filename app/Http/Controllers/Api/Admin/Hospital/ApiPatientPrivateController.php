@@ -37,8 +37,8 @@ class ApiPatientPrivateController extends Controller
         try {
             //Create first form
             $inputs['number'] = (new FormPatientNumberFormat())->getFormPrivateNumber();
-            $currency=Currency::where('name','CDF')->first();
-            $rate=Rate::where('status',true)->first();
+            $currency = Currency::where('name', 'CDF')->first();
+            $rate = Rate::where('status', true)->first();
             //Create Patient
             $inputs['name'] = $request->name;
             $inputs['gender'] = $request->gender;
@@ -52,9 +52,9 @@ class ApiPatientPrivateController extends Controller
             $patient = (new PatientPrivateRepository())->create($inputs);
             if ($patient) {
                 $form = (new FormPatientRepository())->create($inputs);
-                $patient->form_patient_id=$form->id;
+                $patient->form_patient_id = $form->id;
                 (new InvoicePrivateRepository())
-                    ->createInvoice(rand(10,100),$form->id,$request->consultation_id,$rate->id,$currency->id);
+                    ->createInvoice(rand(10, 100), $form->id, $request->consultation_id, $rate->id, $currency->id);
                 $patient->update();
                 $response = [
                     'success' => true,
@@ -107,7 +107,6 @@ class ApiPatientPrivateController extends Controller
         } catch (Exception $ex) {
             return response()->json(['errors' => $ex->getMessage()]);
         }
-
     }
 
     /**
@@ -130,34 +129,67 @@ class ApiPatientPrivateController extends Controller
     }
 
     //Search user
-    public function searchPatient(){
-        $searchQuery=request('query');
+    public function searchPatient()
+    {
+        $searchQuery = request('query');
         try {
-            $patients= (new PatientPrivateRepository())->search($searchQuery);
+            $patients = (new PatientPrivateRepository())->search($searchQuery);
             return PatientPrivateResource::collection($patients);
         } catch (Exception $ex) {
             return response()->json(['errors' => $ex->getMessage()]);
         }
     }
     //Request consultation
-    public function makeConsultation(Request $request){
+    public function makeConsultation(Request $request)
+    {
         try {
-            $currency=Currency::where('name','CDF')->first();
-            $rate=Rate::where('status',true)->first();
-            $invoice=(new InvoicePrivateRepository())->checkPatientExistInvoiceInCurrectMonth($request->form_id);
+            $currency = Currency::where('name', 'CDF')->first();
+            $rate = Rate::where('status', true)->first();
+            $invoice = (new InvoicePrivateRepository())->checkPatientExistInvoiceInCurrectMonth($request->form_id);
             if ($invoice) {
                 $response = [
                     'success' => false,
                     'message' => 'This patient already has a cosulation for this month',
                 ];
-            }else{
+            } else {
                 (new InvoicePrivateRepository())
-                ->createInvoice(rand(10,100),$request->form_id,$request->consultation_id,$rate->id,$currency->id);
+                    ->createInvoice(rand(10, 100), $request->form_id, $request->consultation_id, $rate->id, $currency->id);
                 $response = [
                     'success' => true,
                     'message' => 'Consultation requested successfull',
                 ];
             }
+            return response()->json($response);
+        } catch (Exception $ex) {
+            return response()->json(['errors' => $ex->getMessage()]);
+        }
+    }
+
+    //Enable specific status column
+    public function enableStatus(Request $request, int $id)
+    {
+        try {
+            (new InvoicePrivateRepository())
+                ->enableStatusInvoice($id, 'invoice_privates', $request->column_name);
+            $response = [
+                'success' => true,
+                'message' => 'Status changed successfull',
+            ];
+            return response()->json($response);
+        } catch (Exception $ex) {
+            return response()->json(['errors' => $ex->getMessage()]);
+        }
+    }
+    //Disable specific status column
+    public function disablleStatus(Request $request, int $id)
+    {
+        try {
+            (new InvoicePrivateRepository())
+                ->disableStatusInvoice($id, 'invoice_privates', $request->column_name);
+            $response = [
+                'success' => true,
+                'message' => 'Status changed successfull',
+            ];
             return response()->json($response);
         } catch (Exception $ex) {
             return response()->json(['errors' => $ex->getMessage()]);

@@ -85,5 +85,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/subscribe-resquest-consultation',[ApiPatientSubscribeController::class,'makeConsultation']);
     Route::post('/agent-resquest-consultation',[ApiAgentPatientController::class,'makeConsultation']);
 
+    //Change invoice private status
+    Route::put('invoice-private/{id}/status-enable',[ApiPatientPrivateController::class,'enableStatus']);
+    Route::put('invoice-private/{id}/status-disable',[ApiPatientPrivateController::class,'disablleStatus']);
+    //Change invoice subscribe status
+    Route::put('invoice-subscribe/{id}/status-enable',[ApiPatientSubscribeController::class,'enableStatus']);
+    Route::put('invoice-subscribe/{id}/status-disable',[ApiPatientSubscribeController::class,'disablleStatus']);
+    //Change invoice agent status
+    Route::put('invoice-agent/{id}/status-enable',[ApiAgentPatientController::class,'enableStatus']);
+    Route::put('invoice-agent/{id}/status-disable',[ApiAgentPatientController::class,'disablleStatus']);
 });
 
