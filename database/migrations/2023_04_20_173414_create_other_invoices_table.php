@@ -26,6 +26,7 @@ return new class extends Migration
             $table->enum('genger',['M','F'])->nullable();
             $table->date('date_of_birth')->nullable();
             $table->string('email')->nullable();
+            $table->string('phoone')->nullable();
             $table->foreignIdFor(Hospital::class)->constrained();
             $table->foreignIdFor(Branch::class)->constrained();
             $table->foreignIdFor(FormPatient::class)->nullable()->nullable();
