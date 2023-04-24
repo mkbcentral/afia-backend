@@ -23,6 +23,7 @@ class PatientPrivateResource extends JsonResource
             'age'=>$this->getAge($this->date_of_birth),
             'phone'=>$this->phone,
             'other_phone'=>$this->other_phone,
+            'email'=>$this->email,
             'parcel_number'=>$this->parcel_number,
             'quartier'=>$this->quartier,
             'street'=>$this->street,

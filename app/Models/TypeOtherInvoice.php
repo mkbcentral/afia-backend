@@ -15,9 +15,13 @@ class TypeOtherInvoice extends Model
     {
         return $this->belongsTo(Hospital::class, 'hospital_id');
     }
-
+    /**
+     * Get all of the invoices for the TypeOtherInvoice
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function invoices(): HasMany
     {
-        return $this->hasMany(OtherInvoice::class,);
+        return $this->hasMany(OtherInvoice::class);
     }
 }

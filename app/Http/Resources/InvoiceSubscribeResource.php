@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class OtherInvoiceSubscribeResource extends JsonResource
+class InvoiceSubscribeResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,10 +17,6 @@ class OtherInvoiceSubscribeResource extends JsonResource
         return [
             'id'=>$this->id,
             'invoice_number'=>$this->invoice_number,
-            'name'=>$this->name,
-            'date_of_birth'=>$this->date_of_birth,
-            'email'=>$this->email,
-            'phone'=>$this->phone,
             'hospital'=>$this->hospital,
             'branch'=>$this->branch,
             'formPatient'=>$this->formPatient,
@@ -28,6 +24,7 @@ class OtherInvoiceSubscribeResource extends JsonResource
             'rate'=>$this->rate,
             'currency'=>$this->currency,
             'company'=>$this->company,
+            'consultation'=>$this->consultation,
             'is_valided'=>$this->is_valided,
             'is_paid'=>$this->is_paid,
             'is_printed'=>$this->is_printed,

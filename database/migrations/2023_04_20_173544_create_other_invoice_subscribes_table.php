@@ -23,7 +23,7 @@ return new class extends Migration
             $table->id();
             $table->string('invoice_number')->unique();
             $table->string('name')->nullable();
-            $table->enum('genger',['M','F'])->nullable();
+            $table->enum('gender',['M','F'])->nullable();
             $table->date('date_of_birth')->nullable();
             $table->string('email')->nullable();
             $table->string('phone')->nullable();
@@ -33,7 +33,6 @@ return new class extends Migration
             $table->foreignIdFor(User::class)->constrained();
             $table->foreignIdFor(Rate::class)->constrained();
             $table->foreignIdFor(Currency::class)->constrained();
-            $table->foreignIdFor(TypeOtherInvoice::class)->constrained();
             $table->foreignIdFor(Company::class)->constrained();
             $table->boolean('is_valided')->default(false);
             $table->boolean('is_paid')->default(false);

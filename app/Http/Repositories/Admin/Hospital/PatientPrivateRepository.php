@@ -29,6 +29,7 @@ class PatientPrivateRepository
             'date_of_birth' => $inputs['date_of_birth'],
             'phone' => $inputs['phone'],
             'other_phone' => $inputs['other_phone'],
+            'email' => $inputs['email'],
             'quartier' => $inputs['quartier'],
             'street' => $inputs['street'],
             'parcel_number' => $inputs['parcel_number'],
@@ -52,6 +53,7 @@ class PatientPrivateRepository
         $patient->date_of_birth = $inputs['date_of_birth'];
         $patient->phone = $inputs['phone'];
         $patient->other_phone = $inputs['other_phone'];
+        $patient->email = $inputs['email'];
         $patient->quartier = $inputs['quartier'];
         $patient->street = $inputs['street'];
         $patient->commune_id = $inputs['commune_id'];

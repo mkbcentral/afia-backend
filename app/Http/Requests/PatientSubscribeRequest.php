@@ -27,6 +27,7 @@ class PatientSubscribeRequest extends FormRequest
             'date_of_birth' => 'required|date',
             'phone' => 'nullable|string|unique:patient_subscribes,phone',
             'other_phone' => 'nullable|string|unique:patient_subscribes,other_phone',
+            'email' => 'nullable|string',
             'quartier' => 'nullable|string',
             'parcel_number' => 'nullable|numeric',
             'street' => 'nullable|string',

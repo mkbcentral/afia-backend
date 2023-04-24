@@ -10,9 +10,68 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class OtherInvoice extends Model
 {
     use HasFactory;
-    protected $guarded=[];
+    protected $guarded = [];
+    /**
+     * Get the hospital that owns the OtherInvoice
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function hospital(): BelongsTo
     {
         return $this->belongsTo(Hospital::class, 'hospital_id');
+    }
+    /**
+     * Get the branch that owns the OtherInvoice
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function branch(): BelongsTo
+    {
+        return $this->belongsTo(Branch::class, 'branch_id');
+    }
+    /**
+     * Get the formPatient that owns the OtherInvoice
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function formPatient(): BelongsTo
+    {
+        return $this->belongsTo(FormPatient::class, 'form_patient_id');
+    }
+    /**
+     * Get the user that owns the OtherInvoice
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+    /**
+     * Get the rate that owns the OtherInvoice
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function rate(): BelongsTo
+    {
+        return $this->belongsTo(Rate::class, 'rate_id');
+    }
+    /**
+     * Get the currency that owns the OtherInvoice
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function currency(): BelongsTo
+    {
+        return $this->belongsTo(Currency::class, 'currency_id');
+    }
+    /**
+     * Get the typeInvoice that owns the OtherInvoice
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function typeInvoice(): BelongsTo
+    {
+        return $this->belongsTo(TypeOtherInvoice::class, 'type_other_invoice_id');
     }
 }

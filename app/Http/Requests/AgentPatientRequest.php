@@ -27,6 +27,7 @@ class AgentPatientRequest extends FormRequest
             'date_of_birth' => 'required|date',
             'phone' => 'nullable|string|unique:agent_patients,phone',
             'other_phone' => 'nullable|string|unique:agent_patients,other_phone',
+            'email' => 'nullable|string',
             'quartier' => 'nullable|string',
             'form_patient_id' => 'nullable|string',
             'commune_id' => 'required|numeric',

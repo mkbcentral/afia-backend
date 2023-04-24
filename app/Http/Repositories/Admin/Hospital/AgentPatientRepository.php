@@ -28,6 +28,7 @@ class AgentPatientRepository
             'date_of_birth' => $inputs['date_of_birth'],
             'phone' => $inputs['phone'],
             'other_phone' => $inputs['other_phone'],
+            'email' => $inputs['email'],
             'quartier' => $inputs['quartier'],
             'street' => $inputs['street'],
             'parcel_number' => $inputs['parcel_number'],
@@ -52,6 +53,7 @@ class AgentPatientRepository
         $patient->gender = $inputs['gender'];
         $patient->date_of_birth = $inputs['date_of_birth'];
         $patient->phone = $inputs['phone'];
+        $patient->email = $inputs['email'];
         $patient->other_phone = $inputs['other_phone'];
         $patient->quartier = $inputs['quartier'];
         $patient->street = $inputs['street'];

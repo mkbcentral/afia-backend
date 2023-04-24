@@ -2,13 +2,14 @@
 
 namespace App\Http\Repositories\Invoices\Others;
 
+use App\Http\Actions\InvoiActions;
 use App\Models\Currency;
 use App\Models\OtherInvoice;
 use App\Models\Rate;
 
 ;
 
-class OtherInvoiceRepository
+class CrudOtherInvoiceRepository extends InvoiActions
 {
     //Get all invoices
     public function get()
@@ -26,8 +27,9 @@ class OtherInvoiceRepository
         $currency = Currency::where('name', 'CDF')->first();
         $rate = Rate::where('status', true)->first();
         $invoice = OtherInvoice::create([
-            'invoice_number' => $inputs['invoice_number'],
-            'genger' => $inputs['genger'],
+            'invoice_number' => rand(100,1000),
+            'name' => $inputs['name'],
+            'gender' => $inputs['gender'],
             'date_of_birth' => $inputs['date_of_birth'],
             'email' => $inputs['email'],
             'phone' => $inputs['phone'],
@@ -36,7 +38,7 @@ class OtherInvoiceRepository
             'currency_id' => $currency->id,
             'type_other_invoice_id' => $inputs['type_other_invoice_id'],
             'hospital_id' => auth()->user()->hospital->id,
-            'branch_id' => auth()->user()->branch_id->id,
+            'branch_id' => auth()->user()->branch->id,
             'user_id' => auth()->user()->id,
         ]);
         return $invoice;
@@ -44,21 +46,20 @@ class OtherInvoiceRepository
     //Show specific invoice
     public function show(int $id): OtherInvoice
     {
-        $type = OtherInvoice::find($id);
-        return $type;
+        $invoice = OtherInvoice::find($id);
+        return $invoice;
     }
     //Update specific invoice
     public function update(int $id, array $inputs): OtherInvoice
     {
-        $type = $this->show($id);
-
-        $type->name = $inputs['name'];
-        $type->name = $inputs['gender'];
-        $type->name = $inputs['phone'];
-        $type->name = $inputs['email'];
-        $type->name = $inputs['type_other_invoice_id'];
-        $type->update();
-        return $type;
+        $invoice = $this->show($id);
+        $invoice->name = $inputs['name'];
+        $invoice->gender = $inputs['gender'];
+        $invoice->phone = $inputs['phone'];
+        $invoice->email = $inputs['email'];
+        $invoice->type_other_invoice_id = $inputs['type_other_invoice_id'];
+        $invoice->update();
+        return $invoice;
     }
     //Delete specific invoice
     public function delete(int $id,): bool
@@ -72,4 +73,6 @@ class OtherInvoiceRepository
         }
         return $status;
     }
+
+
 }

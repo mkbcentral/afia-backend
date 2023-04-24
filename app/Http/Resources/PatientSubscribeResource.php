@@ -24,6 +24,7 @@ class PatientSubscribeResource extends JsonResource
             'age'=>$this->getAge($this->date_of_birth),
             'phone'=>$this->phone,
             'other_phone'=>$this->other_phone,
+            'email'=>$this->email,
             'quartier'=>$this->quartier,
             'parcel_number'=>$this->parcel_number,
             'street'=>$this->street,

@@ -45,6 +45,7 @@ class ApiPatientPrivateController extends Controller
             $inputs['date_of_birth'] = $request->date_of_birth;
             $inputs['phone'] = $request->phone;
             $inputs['other_phone'] = $request->other_phone;
+            $inputs['email'] = $request->email;
             $inputs['commune_id'] = $request->commune_id;
             $inputs['parcel_number'] = $request->parcel_number;
             $inputs['quartier'] = $request->quartier;
@@ -93,6 +94,7 @@ class ApiPatientPrivateController extends Controller
             $inputs['date_of_birth'] = $request->date_of_birth;
             $inputs['phone'] = $request->phone;
             $inputs['other_phone'] = $request->other_phone;
+            $inputs['email'] = $request->email;
             $inputs['parcel_number'] = $request->parcel_number;
             $inputs['quartier'] = $request->quartier;
             $inputs['street'] = $request->street;

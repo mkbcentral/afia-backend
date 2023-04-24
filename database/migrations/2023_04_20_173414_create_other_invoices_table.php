@@ -23,10 +23,10 @@ return new class extends Migration
             $table->id();
             $table->string('invoice_number')->unique();
             $table->string('name')->nullable();
-            $table->enum('genger',['M','F'])->nullable();
+            $table->enum('gender',['M','F'])->nullable();
             $table->date('date_of_birth')->nullable();
             $table->string('email')->nullable();
-            $table->string('phoone')->nullable();
+            $table->string('phone')->nullable();
             $table->foreignIdFor(Hospital::class)->constrained();
             $table->foreignIdFor(Branch::class)->constrained();
             $table->foreignIdFor(FormPatient::class)->nullable()->nullable();

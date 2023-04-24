@@ -28,6 +28,7 @@ class PatientSubscribeRepository
             'date_of_birth' => $inputs['date_of_birth'],
             'phone' => $inputs['phone'],
             'other_phone' => $inputs['other_phone'],
+            'email' => $inputs['email'],
             'quartier' => $inputs['quartier'],
             'parcel_number' => $inputs['parcel_number'],
             'street' => $inputs['street'],

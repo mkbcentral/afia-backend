@@ -27,4 +27,24 @@ class Company extends Model
         return $this->belongsTo(Subscription::class, 'subscription_id');
     }
 
+    /**
+     * Get all of the invoices for the Company
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function invoices(): HasMany
+    {
+        return $this->hasMany(InvoiceSubscribe::class);
+    }
+
+    /**
+     * Get all of the otherInvoices for the Company
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function otherInvoices(): HasMany
+    {
+        return $this->hasMany(OtherInvoiceSubscribe::class);
+    }
+
 }

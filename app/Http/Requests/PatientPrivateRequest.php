@@ -27,6 +27,7 @@ class PatientPrivateRequest extends FormRequest
             'date_of_birth' => 'required',
             'phone' => 'nullable|string|unique:patient_privates,phone',
             'other_phone' => 'nullable|string|unique:patient_privates,other_phone',
+            'email' => 'nullable|string',
             'quartier' => 'nullable|string',
             'parcel_number' => 'nullable|numeric',
             'street' => 'nullable|string',

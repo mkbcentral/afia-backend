@@ -18,8 +18,11 @@ use App\Http\Controllers\Api\Admin\Tarification\ApiTarificationController;
 use App\Http\Controllers\Api\Admin\User\ApiRoleController;
 use App\Http\Controllers\Api\Admin\User\ApiUserController;
 use App\Http\Controllers\Api\Auth\LogingController;
-use App\Http\Controllers\AppController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\Auth\LogoutController;
+use App\Http\Controllers\Api\Invoices\ApiItemsInvoiceController;
+use App\Http\Controllers\Api\Invoices\Other\ApiOtherInvoiceController;
+use App\Http\Controllers\Api\Invoices\Other\ApiOtherInvoiceSubscribeController;
+use App\Http\Controllers\Api\Invoices\Other\ApiTypeOtherInvoiceController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -36,12 +39,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::post('login', LogingController::class);
-
-Route::controller(AppController::class)->group(function(){
-    Route::get('/test','test');
-});
-
 Route::middleware('auth:sanctum')->group(function () {
+    //Administration routes
     Route::resource('role', ApiRoleController::class);
     Route::resource('user', ApiUserController::class);
     Route::resource('hospital', ApiHospitalController::class);
@@ -49,16 +48,22 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('commune', ApiCommuneController::class);
     Route::resource('service-agent', ApiAgentServiceController::class);
     Route::resource('company', ApiCompanyController::class);
+    //Patient routes CRUD
     Route::resource('subscription', ApiSubscriptionController::class);
     Route::resource('patient-private', ApiPatientPrivateController::class);
     Route::resource('patient-subscribe', ApiPatientSubscribeController::class);
     Route::resource('agent-patient', ApiAgentPatientController::class);
     Route::resource('patient-type', ApiPatientTypeController::class);
+    //Tarification routes
     Route::resource('rate', ApiRateController::class);
     Route::resource('currency', ApiCurrencyController::class);
     Route::resource('tarification', ApiTarificationController::class);
     Route::resource('category-tarification', ApiCategoaryTarificationController::class);
     Route::resource('consultation', ApiConsultationController::class);
+    //Other invoices routes CRUD
+    Route::resource('other-invoice-type', ApiTypeOtherInvoiceController::class);
+    Route::resource('other-invoice', ApiOtherInvoiceController::class);
+    Route::resource('other-invoice-subscribe', ApiOtherInvoiceSubscribeController::class);
 
     //Change status routes
     Route::put('/branch/status/{id}', [ApiBranchController::class, 'changeStatus']);
@@ -72,27 +77,43 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/consultation/status/{id}', [ApiConsultationController::class, 'changeStatus']);
 
     //Search routes
-    Route::get('/users/search',[ApiUserController::class,'searchUser']);
-    Route::get('/patient/private/search/',[ApiPatientPrivateController::class,'searchPatient']);
-    Route::get('/patient/subscribe/search/',[ApiPatientSubscribeController::class,'searchPatient']);
-    Route::get('/agent/patient/search/',[ApiAgentPatientController::class,'searchPatient']);
+    Route::get('/users/search', [ApiUserController::class, 'searchUser']);
+    Route::get('/patient/private/search/', [ApiPatientPrivateController::class, 'searchPatient']);
+    Route::get('/patient/subscribe/search/', [ApiPatientSubscribeController::class, 'searchPatient']);
+    Route::get('/agent/patient/search/', [ApiAgentPatientController::class, 'searchPatient']);
     //Get first record routes
     Route::get('first-category-rarif', [ApiCategoaryTarificationController::class, 'getFirstRecord']);
     //Get current rate route
-    Route::get('current-rate',[ApiRateController::class,'getCurrentRate']);
+    Route::get('current-rate', [ApiRateController::class, 'getCurrentRate']);
     //Request consultation route
-    Route::post('/private-resquest-consultation',[ApiPatientPrivateController::class,'makeConsultation']);
-    Route::post('/subscribe-resquest-consultation',[ApiPatientSubscribeController::class,'makeConsultation']);
-    Route::post('/agent-resquest-consultation',[ApiAgentPatientController::class,'makeConsultation']);
+    Route::post('/private-resquest-consultation', [ApiPatientPrivateController::class, 'makeConsultation']);
+    Route::post('/subscribe-resquest-consultation', [ApiPatientSubscribeController::class, 'makeConsultation']);
+    Route::post('/agent-resquest-consultation', [ApiAgentPatientController::class, 'makeConsultation']);
 
     //Change invoice private status
-    Route::put('invoice-private/{id}/status-enable',[ApiPatientPrivateController::class,'enableStatus']);
-    Route::put('invoice-private/{id}/status-disable',[ApiPatientPrivateController::class,'disablleStatus']);
+    Route::put('invoice-private/{id}/status-enable', [ApiPatientPrivateController::class, 'enableStatus']);
+    Route::put('invoice-private/{id}/status-disable', [ApiPatientPrivateController::class, 'disablleStatus']);
     //Change invoice subscribe status
-    Route::put('invoice-subscribe/{id}/status-enable',[ApiPatientSubscribeController::class,'enableStatus']);
-    Route::put('invoice-subscribe/{id}/status-disable',[ApiPatientSubscribeController::class,'disablleStatus']);
+    Route::put('invoice-subscribe/{id}/status-enable', [ApiPatientSubscribeController::class, 'enableStatus']);
+    Route::put('invoice-subscribe/{id}/status-disable', [ApiPatientSubscribeController::class, 'disablleStatus']);
     //Change invoice agent status
-    Route::put('invoice-agent/{id}/status-enable',[ApiAgentPatientController::class,'enableStatus']);
-    Route::put('invoice-agent/{id}/status-disable',[ApiAgentPatientController::class,'disablleStatus']);
-});
+    Route::put('invoice-agent/{id}/status-enable', [ApiAgentPatientController::class, 'enableStatus']);
+    Route::put('invoice-agent/{id}/status-disable', [ApiAgentPatientController::class, 'disablleStatus']);
+    //Change other invoice private status
+    Route::put('other-invoice/{id}/status-enable', [ApiOtherInvoiceController::class, 'enableStatus']);
+    Route::put('other-invoice/{id}/status-disable', [ApiOtherInvoiceController::class, 'disablleStatus']);
+        //Change other invoice subscribe status
+    Route::put('other-invoice-subscribe/{id}/status-enable', [ApiOtherInvoiceSubscribeController::class, 'enableStatus']);
+    Route::put('other-invoice-subscribe/{id}/status-disable', [ApiOtherInvoiceSubscribeController::class, 'disablleStatus']);
 
+    //Create items routes
+    Route::get('create-items-invoice-private/{id}',[ApiItemsInvoiceController::class,'createInvoicePrivateItems']);
+    Route::get('create-items-invoice-subscribe/{id}',[ApiItemsInvoiceController::class,'createInvoicesSubscribeItems']);
+    Route::get('create-items-other-invoice/{id}',[ApiItemsInvoiceController::class,'createOtherInvoiceItems']);
+    Route::get('create-items-other-invoice-subscribe/{id}',[ApiItemsInvoiceController::class,'createOtherInvoiceSubscribeItems']);
+
+    Route::delete('delete-items-invoice/{id}',[ApiItemsInvoiceController::class,'deleIvoiceItem']);
+    Route::put('update-qty-items-invoice/{id}',[ApiItemsInvoiceController::class,'updateQtyInvoiceItem']);
+    //Logout User
+    Route::get('logout', LogoutController::class);
+});

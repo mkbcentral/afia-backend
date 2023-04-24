@@ -26,17 +26,23 @@ class LogingController extends Controller
         try {
             if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
                 $user = Auth::user();
-                $success['token'] = $user->createToken('My token')->plainTextToken;
-                $success['name'] = $user->email;
-                $success['hospital'] = new HospitalResource($user->hospital);
-                $success['role'] = new RoleResource($user->role);
-                $success['branch'] = new BranchResource($user->branch);
-                $response = [
-                    'success' => true,
-                    'data' => $success,
-                    'message' => 'User login successfull'
-                ];
-
+                if($user->status=='ENABLE'){
+                    $success['token'] = $user->createToken('My token')->plainTextToken;
+                    $success['name'] = $user->email;
+                    $success['hospital'] = new HospitalResource($user->hospital);
+                    $success['role'] = new RoleResource($user->role);
+                    $success['branch'] = new BranchResource($user->branch);
+                    $response = [
+                        'success' => true,
+                        'data' => $success,
+                        'message' => 'User login successfull'
+                    ];
+                }else{
+                    $response = [
+                        'success' => false,
+                        'message' => 'Your account is disable'
+                    ];
+                }
                 return response()->json($response);
             } else {
                 $response = [

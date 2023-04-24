@@ -46,6 +46,7 @@ class ApiPatientSubscribeController extends Controller
             $inputs['date_of_birth'] = $request->date_of_birth;
             $inputs['phone'] = $request->phone;
             $inputs['other_phone'] = $request->other_phone;
+            $inputs['email'] = $request->email;
             $inputs['quartier'] = $request->quartier;
             $inputs['street'] = $request->street;
             $inputs['parcel_number'] = $request->parcel_number;
@@ -99,6 +100,7 @@ class ApiPatientSubscribeController extends Controller
             $inputs['date_of_birth'] = $request->date_of_birth;
             $inputs['phone'] = $request->phone;
             $inputs['other_phone'] = $request->other_phone;
+            $inputs['email'] = $request->email;
             $inputs['quartier'] = $request->quartier;
             $inputs['parcel_number'] = $request->parcel_number;
             $inputs['street'] = $request->street;
