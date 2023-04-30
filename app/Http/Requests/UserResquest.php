@@ -23,10 +23,9 @@ class UserResquest extends FormRequest
     {
         return [
             'name' => 'required|string',
-            'email' => 'required|email|unique:users,email',
-            'phone' => 'required|unique:users,phone',
+            'email' => 'required|email',
+            'phone' => 'required|string',
             'role_id' => 'required|numeric',
-            'branch_id' => 'required|numeric',
         ];
     }
 }

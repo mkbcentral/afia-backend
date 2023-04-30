@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Tarification extends Model
 {
@@ -34,5 +35,16 @@ class Tarification extends Model
     public function category(): BelongsTo
     {
         return $this->belongsTo(CategoryTarification::class, 'category_tarification_id');
+    }
+
+     /**
+     * The roles that belong to the PatientPrivate
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function privateInvoices(): BelongsToMany
+    {
+        return $this->belongsToMany(InvoicePrivate::class, 'invoice_private_tarification', 'invoice_private_id', 'tarification_id')
+                    ->withPivot(['id','qty']);
     }
 }

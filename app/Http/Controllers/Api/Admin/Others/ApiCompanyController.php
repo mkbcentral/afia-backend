@@ -84,7 +84,7 @@ class ApiCompanyController extends Controller
             $response = [
                 'success' => true,
                 'message' => 'Company updated successfull',
-                'company'=>$company
+                'company'=>new CompanyResource($company)
             ];
             return response()->json($response, 200);
         } catch (Exception $ex) {

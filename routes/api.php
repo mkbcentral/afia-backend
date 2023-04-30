@@ -19,6 +19,7 @@ use App\Http\Controllers\Api\Admin\User\ApiRoleController;
 use App\Http\Controllers\Api\Admin\User\ApiUserController;
 use App\Http\Controllers\Api\Auth\LogingController;
 use App\Http\Controllers\Api\Auth\LogoutController;
+use App\Http\Controllers\Api\Invoices\ApiInvoicePrivateController;
 use App\Http\Controllers\Api\Invoices\ApiItemsInvoiceController;
 use App\Http\Controllers\Api\Invoices\Other\ApiOtherInvoiceController;
 use App\Http\Controllers\Api\Invoices\Other\ApiOtherInvoiceSubscribeController;
@@ -86,9 +87,9 @@ Route::middleware('auth:sanctum')->group(function () {
     //Get current rate route
     Route::get('current-rate', [ApiRateController::class, 'getCurrentRate']);
     //Request consultation route
-    Route::post('/private-resquest-consultation', [ApiPatientPrivateController::class, 'makeConsultation']);
-    Route::post('/subscribe-resquest-consultation', [ApiPatientSubscribeController::class, 'makeConsultation']);
-    Route::post('/agent-resquest-consultation', [ApiAgentPatientController::class, 'makeConsultation']);
+    Route::post('/private-make-consultation', [ApiPatientPrivateController::class, 'makeConsultation']);
+    Route::post('/subscribe-make-consultation', [ApiPatientSubscribeController::class, 'makeConsultation']);
+    Route::post('/agent-make-consultation', [ApiAgentPatientController::class, 'makeConsultation']);
 
     //Change invoice private status
     Route::put('invoice-private/{id}/status-enable', [ApiPatientPrivateController::class, 'enableStatus']);
@@ -102,18 +103,24 @@ Route::middleware('auth:sanctum')->group(function () {
     //Change other invoice private status
     Route::put('other-invoice/{id}/status-enable', [ApiOtherInvoiceController::class, 'enableStatus']);
     Route::put('other-invoice/{id}/status-disable', [ApiOtherInvoiceController::class, 'disablleStatus']);
-        //Change other invoice subscribe status
+    //Change other invoice subscribe status
     Route::put('other-invoice-subscribe/{id}/status-enable', [ApiOtherInvoiceSubscribeController::class, 'enableStatus']);
     Route::put('other-invoice-subscribe/{id}/status-disable', [ApiOtherInvoiceSubscribeController::class, 'disablleStatus']);
 
     //Create items routes
-    Route::get('create-items-invoice-private/{id}',[ApiItemsInvoiceController::class,'createInvoicePrivateItems']);
-    Route::get('create-items-invoice-subscribe/{id}',[ApiItemsInvoiceController::class,'createInvoicesSubscribeItems']);
-    Route::get('create-items-other-invoice/{id}',[ApiItemsInvoiceController::class,'createOtherInvoiceItems']);
-    Route::get('create-items-other-invoice-subscribe/{id}',[ApiItemsInvoiceController::class,'createOtherInvoiceSubscribeItems']);
-
-    Route::delete('delete-items-invoice/{id}',[ApiItemsInvoiceController::class,'deleIvoiceItem']);
+    Route::get('create-items-invoice-private/{id}',[ApiItemsInvoiceController::class,'createInvoiceItems']);
     Route::put('update-qty-items-invoice/{id}',[ApiItemsInvoiceController::class,'updateQtyInvoiceItem']);
+    Route::delete('delete-item-invoice-private/{id}',[ApiItemsInvoiceController::class,'deleteIvoiceItem']);
+    Route::get('items-invoices-private/{id}',[ApiItemsInvoiceController::class,'getItemsInvoice']);
+
+    //GET ELL INVOICE
+    Route::get('invoices-private',[ApiInvoicePrivateController::class,'getInvoices']);
+    //GET SPECIFIC INVOICE
+    Route::get('invoice-private/{id}',[ApiInvoicePrivateController::class,'show']);
+    //GET ITEMS INVOICE
+
+    //GET ITEMS INVOICE
+
     //Logout User
     Route::get('logout', LogoutController::class);
 });

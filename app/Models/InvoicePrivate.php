@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Facades\DB;
 
 class InvoicePrivate extends Model
 {
@@ -72,6 +74,55 @@ class InvoicePrivate extends Model
     public function consultation(): BelongsTo
     {
         return $this->belongsTo(Consultation::class, 'consultation_id');
+    }
+
+    /**
+     * The tarifications that belong to the InvoicePrivate
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function tarifications(): BelongsToMany
+    {
+        return $this->belongsToMany(Tarification::class,'invoice_private_tarification', 'invoice_private_id', 'tarification_id')
+        ->withPivot(['id','qty']);
+    }
+
+    public  function  getAmountInvoice($id){
+        $invoice=InvoicePrivate::find($id);
+        $items_invoice=DB::table('invoice_private_tarification')->where('invoice_private_id',$invoice->id)
+            ->join(
+                'tarifications',
+                'tarifications.id','=',
+                'invoice_private_tarification.tarification_id'
+            )
+            ->join(
+                'category_tarifications',
+                'category_tarifications.id','=',
+                'tarifications.category_tarification_id'
+            )
+            ->select(
+                'category_tarifications.name as category',
+                'invoice_private_tarification.id',
+                'tarifications.name',
+                'tarifications.price_private',
+                'invoice_private_tarification.qty'
+            )
+            ->groupBy(
+                'category',
+                'invoice_private_tarification.id',
+                'tarifications.name',
+                'tarifications.price_private',
+                'invoice_private_tarification.qty'
+            )
+            ->get();
+        $groupedItems = [];
+        $total_invoice=0;
+        foreach ($items_invoice as $item) {
+            $total_invoice+=$item->price_private*$item->qty;
+        }
+        return request('currency')=='CDF'
+                ?$total_invoice*$invoice->rate->amount
+                :$total_invoice;
     }
 
 }

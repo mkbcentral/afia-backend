@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Api\Invoices;
 
+use App\Http\Actions\InvoiActions;
 use App\Http\Controllers\Controller;
 use App\Http\Repositories\Invoices\InvoiceItemsRepository;
+use App\Http\Repositories\Invoices\InvoicePrivateRepository;
 use App\Models\InvoicePrivate;
 use App\Models\InvoiceSubscribe;
 use App\Models\OtherInvoice;
@@ -13,139 +15,48 @@ use Illuminate\Http\Request;
 
 class ApiItemsInvoiceController extends Controller
 {
+
+    public function getItemsInvoice($id){
+        try {
+            $items_invoice= (new InvoicePrivateRepository())->getInvoiceItem($id);
+            $response = [
+                'items_invoice'=>$items_invoice
+            ];
+            return response()->json($response, 200);
+        } catch (Exception $ex) {
+            return response()->json(['errors' => $ex->getMessage()]);
+        }
+    }
     //Create invoice private itmes
-    public function createInvoicePrivateItems(Request $request,$id)
+    public function createInvoiceItems(Request $request,$id)
     {
         try {
-            $invoice = InvoicePrivate::find($id);
-            $data = [
-                [
-                    'invoice_private_id' => $request->id,
-                    'tarification_id' => 1
-                ],
-                [
-                    'invoice_private_id' => $request->id,
-                    'tarification_id' => 2
-                ],
-                [
-                    'invoice_private_id' => $request->id,
-                    'tarification_id' => 3
-                ]
-            ];
-            (new InvoiceItemsRepository())->createInvoiceLines('invoice_private_tarification',$data);
+            foreach ($request->items as $item){
+                $data=(new InvoiActions())->checkIfItemExistOnInvoice(
+                    'invoice_private_tarification',
+                    'invoice_private_id',
+                    $item['invoice_private_id'],
+                );
+                foreach ($data as $val){
+                    if($item['tarification_id']==$val->tarification_id){
+                        (new InvoiActions())->deleteInvoiceItem($val->id,'invoice_private_tarification');
+                    }
+                }
+            }
+            (new InvoiceItemsRepository())
+                ->createInvoiceLines(request('table'),$request->items);
             $response = [
                 'success' => true,
                 'message' => 'Items invoice added successfull',
             ];
             return response()->json($response, 200);
+
         } catch (Exception $ex) {
             return response()->json(['errors' => $ex->getMessage()]);
         }
     }
     //Create invoice subscribe itmes
-    public function createInvoicesSubscribeItems(Request $request,$id)
-    {
-        try {
-            $invoice = InvoiceSubscribe::find($id);
-            $data = [
-                [
-                    'invoice_subscribe_id' => $invoice->id,
-                    'tarification_id' => 1
-                ],
-                [
-                    'invoice_subscribe_id' => $invoice->id,
-                    'tarification_id' => 2
-                ],
-                [
-                    'invoice_subscribe_id' => $invoice->id,
-                    'tarification_id' => 3
-                ]
-            ];
-            (new InvoiceItemsRepository())->createInvoiceLines('invoice_subscribe_tarification',$data);
-            $response = [
-                'success' => true,
-                'message' => 'Items invoice added successfull',
-            ];
-            return response()->json($response, 200);
-        } catch (Exception $ex) {
-            return response()->json(['errors' => $ex->getMessage()]);
-        }
-    }
-    //Create other invoice  itmes
-    public function createOtherInvoiceItems(Request $request,$id)
-    {
-        try {
-            $invoice = OtherInvoice::find($id);
-            $data = [
-                [
-                    'other_invoice_id' => $invoice->id,
-                    'tarification_id' => 1
-                ],
-                [
-                    'other_invoice_id' => $invoice->id,
-                    'tarification_id' => 2
-                ],
-                [
-                    'other_invoice_id' => $invoice->id,
-                    'tarification_id' => 3
-                ]
-            ];
-            (new InvoiceItemsRepository())->createInvoiceLines('other_invoice_tarification',$data);
-            $response = [
-                'success' => true,
-                'message' => 'Items invoice added successfull',
-            ];
-            return response()->json($response, 200);
-        } catch (Exception $ex) {
-            return response()->json(['errors' => $ex->getMessage()]);
-        }
-    }
-    //Create invoice private itmes
-    public function createOtherInvoiceSubscribeItems(Request $request,$id)
-    {
-        try {
-            $invoice = OtherInvoiceSubscribe::find($id);
-            $data = [
-                [
-                    'other_invoice_subscribe_id' => $invoice->id,
-                    'tarification_id' => 1
-                ],
-                [
-                    'other_invoice_subscribe_id' => $invoice->id,
-                    'tarification_id' => 2
-                ],
-                [
-                    'other_invoice_subscribe_id' => $invoice->id,
-                    'tarification_id' => 3
-                ]
-            ];
-            (new InvoiceItemsRepository())->createInvoiceLines('other_invoice_subscribe_tarification',$data);
-            $response = [
-                'success' => true,
-                'message' => 'Items invoice added successfull',
-            ];
-            return response()->json($response, 200);
-        } catch (Exception $ex) {
-            return response()->json(['errors' => $ex->getMessage()]);
-        }
-    }
-
-    public function deleIvoiceItem(Request $request,$id){
-        //return $request;
-        try {
-            (new InvoiceItemsRepository())->deleteItemInvoice($id,$request->table);
-            $response = [
-                'success' => true,
-                'message' => 'Items invoice deleted successfull',
-            ];
-            return response()->json($response, 200);
-        } catch (Exception $ex) {
-            return response()->json(['errors' => $ex->getMessage()]);
-        }
-    }
-
     public function  updateQtyInvoiceItem(Request $request,$id){
-        //return $request;
         try {
             (new InvoiceItemsRepository())->udateItemInvoiceQty($id,$request->table,$request->qty);
             $response = [
@@ -157,6 +68,16 @@ class ApiItemsInvoiceController extends Controller
             return response()->json(['errors' => $ex->getMessage()]);
         }
     }
-
-
+    public function deleteIvoiceItem(int $id){
+        try {
+            (new InvoicePrivateRepository())->deleteInvoiceItem($id,\request('table'));
+            $response = [
+                'message'=>'Item deleted successfull',
+                'status'=>true
+            ];
+            return response()->json($response, 200);
+        } catch (Exception $ex) {
+            return response()->json(['errors' => $ex->getMessage()]);
+        }
+    }
 }

@@ -14,12 +14,12 @@ class CrudOtherInvoiceRepository extends InvoiActions
     //Get all invoices
     public function get()
     {
-        $types = OtherInvoice::where('hospital_id', auth()->user()->hospital->id)
+        $invoices = OtherInvoice::where('hospital_id', auth()->user()->hospital->id)
             ->where('branch_id',auth()->user()->branch->id)
             ->whereMonth('created_at',date('m'))
             ->orderBy('name', 'asc')
             ->get();
-        return $types;
+        return $invoices;
     }
     //Create new invoice
     public function create(array $inputs): OtherInvoice

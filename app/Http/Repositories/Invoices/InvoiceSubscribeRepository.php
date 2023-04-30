@@ -6,6 +6,16 @@ use App\Http\Actions\InvoiActions;
 use App\Models\InvoiceSubscribe;
 
 class InvoiceSubscribeRepository extends InvoiActions{
+    //Get all invoices
+    public function get()
+    {
+        $invoices = InvoiceSubscribe::where('hospital_id', auth()->user()->hospital->id)
+            ->where('branch_id',auth()->user()->branch->id)
+            ->whereMonth('created_at',date('m'))
+            ->orderBy('name', 'asc')
+            ->get();
+        return $invoices;
+    }
     public function createInvoice($invoice_number,$form_patient_id,$consultation_id,$rate_id,$currency_id,$company_id):InvoiceSubscribe{
 
         $invoice=InvoiceSubscribe::create([

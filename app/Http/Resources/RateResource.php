@@ -17,6 +17,7 @@ class RateResource extends JsonResource
         return[
             'id'=>$this->id,
             'amount'=>$this->amount,
+            'status_name'=>$this->status==true?'ENABLE':'DISABLE',
             'status'=>$this->status
         ];
     }

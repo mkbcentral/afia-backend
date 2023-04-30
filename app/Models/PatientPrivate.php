@@ -6,6 +6,7 @@ use App\Http\Repositories\Others\DateFormatHelper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class PatientPrivate extends Model
 {
@@ -24,7 +25,8 @@ class PatientPrivate extends Model
         'form_patient_id'
     ];
 
-    public function getAge($date){
+    public function getAge($date)
+    {
         return (new DateFormatHelper())->getUserAge($date);
     }
 
@@ -41,5 +43,15 @@ class PatientPrivate extends Model
     public function type(): BelongsTo
     {
         return $this->belongsTo(PatientType::class, 'patient_id');
+    }
+
+    /**
+     * The roles that belong to the PatientPrivate
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function tarifications(): BelongsToMany
+    {
+        return $this->belongsToMany(Tarification::class, 'invoice_private_tarification', 'invoice_private_id', 'tarification_id');
     }
 }
