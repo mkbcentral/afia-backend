@@ -45,6 +45,7 @@ class InvoicePrivateRepository extends InvoiActions{
     public function getInvoiceItem($id)
     {
         $invoice=InvoicePrivate::find($id);
+        $consultation=$invoice->consultation;
         $items_invoice=DB::table('invoice_private_tarification')->where('invoice_private_id',$invoice->id)
             ->join(
                 'tarifications',
@@ -95,8 +96,14 @@ class InvoicePrivateRepository extends InvoiActions{
         }
         return [
             'total_invoice'=>request('currency')=='CDF'
-                ?$total_invoice*$invoice->rate->amount
-                :$total_invoice,
+                ?($total_invoice+$consultation->price_private)*$invoice->rate->amount
+                :$total_invoice+$consultation->price_private,
+            'consultation'=>[
+                'name'=>$consultation->name,
+                'amount'=>request('currency')=='CDF'
+                        ?$consultation->price_private*$invoice->rate->amount
+                        :$consultation->price_private
+            ],
             'data'=>$groupedItems,
         ];
     }

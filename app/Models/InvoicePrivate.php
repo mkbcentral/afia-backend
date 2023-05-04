@@ -89,6 +89,7 @@ class InvoicePrivate extends Model
 
     public  function  getAmountInvoice($id){
         $invoice=InvoicePrivate::find($id);
+        $amount_cons=$invoice->consultation->price_private;
         $items_invoice=DB::table('invoice_private_tarification')->where('invoice_private_id',$invoice->id)
             ->join(
                 'tarifications',
@@ -121,8 +122,8 @@ class InvoicePrivate extends Model
             $total_invoice+=$item->price_private*$item->qty;
         }
         return request('currency')=='CDF'
-                ?$total_invoice*$invoice->rate->amount
-                :$total_invoice;
+                ?($total_invoice+$amount_cons)*$invoice->rate->amount
+                :$total_invoice+$amount_cons;
     }
 
 }

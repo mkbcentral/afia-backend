@@ -83,7 +83,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/patient/subscribe/search/', [ApiPatientSubscribeController::class, 'searchPatient']);
     Route::get('/agent/patient/search/', [ApiAgentPatientController::class, 'searchPatient']);
     //Get first record routes
-    Route::get('first-category-rarif', [ApiCategoaryTarificationController::class, 'getFirstRecord']);
+    Route::get('first-category-tarif', [ApiCategoaryTarificationController::class, 'getFirstRecord']);
     //Get current rate route
     Route::get('current-rate', [ApiRateController::class, 'getCurrentRate']);
     //Request consultation route
