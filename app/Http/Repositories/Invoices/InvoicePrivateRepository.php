@@ -86,23 +86,24 @@ class InvoicePrivateRepository extends InvoiActions{
                 'name' => $item->name,
                 'qty' => $item->qty,
                 'price' => request('currency')=='CDF'
-                    ? $item->price_private*$invoice->rate->amount
-                    :$item->price_private,
-                'total'=>request('currency')=='CDF'
-                        ?$item->price_private*$item->qty*$invoice->rate->amount
-                        :$item->price_private*$item->qty
+                    ? number_format($item->price_private*$invoice->rate->amount, 1, ',', ' ')
+                    :number_format($item->price_private, 1, ',', ' '),
+                'total'=>
+                    request('currency')=='CDF'
+                        ?number_format($item->price_private*$item->qty*$invoice->rate->amount, 1, ',', ' ')
+                        :number_format($item->price_private*$item->qty, 1, ',', ' ')
             ];
             $total_invoice+=$item->price_private*$item->qty;
         }
         return [
             'total_invoice'=>request('currency')=='CDF'
-                ?($total_invoice+$consultation->price_private)*$invoice->rate->amount
-                :$total_invoice+$consultation->price_private,
+                ?number_format(($total_invoice+$consultation->price_private)*$invoice->rate->amount, 1, ',', ' ')
+                :number_format($total_invoice+$consultation->price_private, 1, ',', ' '),
             'consultation'=>[
                 'name'=>$consultation->name,
                 'amount'=>request('currency')=='CDF'
-                        ?$consultation->price_private*$invoice->rate->amount
-                        :$consultation->price_private
+                        ?number_format($consultation->price_private*$invoice->rate->amount, 1, ',', ' ')
+                        :number_format( $consultation->price_private, 1, ',', ' ')
             ],
             'data'=>$groupedItems,
         ];
