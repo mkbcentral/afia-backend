@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Facades\DB;
 
 class InvoiceSubscribe extends Model
 {
@@ -82,4 +84,50 @@ class InvoiceSubscribe extends Model
     {
         return $this->belongsTo(Consultation::class, 'consultation_id');
     }
+
+    public function tarifications(): BelongsToMany
+    {
+        return $this->belongsToMany(Tarification::class,'invoice_subscribe_tarification', 'invoice_subscribe_id', 'tarification_id')
+        ->withPivot(['id','qty']);
+    }
+
+    public  function  getAmountInvoice($id){
+        $invoice=InvoiceSubscribe::find($id);
+        $amount_cons=$invoice->consultation->price_subscribe;
+        $items_invoice=DB::table('invoice_subscribe_tarification')->where('invoice_subscribe_id',$invoice->id)
+            ->join(
+                'tarifications',
+                'tarifications.id','=',
+                'invoice_subscribe_tarification.tarification_id'
+            )
+            ->join(
+                'category_tarifications',
+                'category_tarifications.id','=',
+                'tarifications.category_tarification_id'
+            )
+            ->select(
+                'category_tarifications.name as category',
+                'invoice_subscribe_tarification.id',
+                'tarifications.name',
+                'tarifications.price_subscribe',
+                'invoice_subscribe_tarification.qty'
+            )
+            ->groupBy(
+                'category',
+                'invoice_subscribe_tarification.id',
+                'tarifications.name',
+                'tarifications.price_subscribe',
+                'invoice_subscribe_tarification.qty'
+            )
+            ->get();
+        $groupedItems = [];
+        $total_invoice=0;
+        foreach ($items_invoice as $item) {
+            $total_invoice+=$item->price_subscribe*$item->qty;
+        }
+        return request('currency')=='CDF'
+                ?($total_invoice+$amount_cons)*$invoice->rate->amount
+                :$total_invoice+$amount_cons;
+    }
+
 }

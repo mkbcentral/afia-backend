@@ -10,9 +10,11 @@ class InvoicePrivateRepository extends InvoiActions{
     //Get all invoices
     public function get()
     {
+
         $invoices = InvoicePrivate::where('hospital_id', auth()->user()->hospital->id)
             ->where('branch_id',auth()->user()->branch->id)
             ->whereMonth('created_at',date('m'))
+            ->with(['formPatient.patientPrivate','hospital','branch','user','rate','currency'])
             ->orderBy('created_at', 'asc')
             ->get();
         return $invoices;

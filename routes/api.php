@@ -20,6 +20,7 @@ use App\Http\Controllers\Api\Admin\User\ApiUserController;
 use App\Http\Controllers\Api\Auth\LogingController;
 use App\Http\Controllers\Api\Auth\LogoutController;
 use App\Http\Controllers\Api\Invoices\ApiInvoicePrivateController;
+use App\Http\Controllers\Api\Invoices\ApiInvoiceSubscribeController;
 use App\Http\Controllers\Api\Invoices\ApiItemsInvoiceController;
 use App\Http\Controllers\Api\Invoices\Other\ApiOtherInvoiceController;
 use App\Http\Controllers\Api\Invoices\Other\ApiOtherInvoiceSubscribeController;
@@ -113,8 +114,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('delete-item-invoice-private/{id}',[ApiItemsInvoiceController::class,'deleteIvoiceItem']);
     Route::get('items-invoices-private/{id}',[ApiItemsInvoiceController::class,'getItemsInvoice']);
 
-    //GET ELL INVOICE
+    //GET ALL INVOICE
     Route::get('invoices-private',[ApiInvoicePrivateController::class,'getInvoices']);
+    Route::get('invoices-subscribe',[ApiInvoiceSubscribeController::class,'getInvoices']);
     //GET SPECIFIC INVOICE
     Route::get('invoice-private/{id}',[ApiInvoicePrivateController::class,'show']);
     //GET ITEMS INVOICE
