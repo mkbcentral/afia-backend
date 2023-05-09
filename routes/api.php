@@ -82,7 +82,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/patient/private/search/', [ApiPatientPrivateController::class, 'searchPatient']);
     Route::get('/patient/subscribe/search/', [ApiPatientSubscribeController::class, 'searchPatient']);
     Route::get('/agent/patient/search/', [ApiAgentPatientController::class, 'searchPatient']);
-    //Get first record routes
+    //Get first category route
     Route::get('first-category-tarif', [ApiCategoaryTarificationController::class, 'getFirstRecord']);
     //Get current rate route
     Route::get('current-rate', [ApiRateController::class, 'getCurrentRate']);
@@ -117,9 +117,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('invoices-private',[ApiInvoicePrivateController::class,'getInvoices']);
     //GET SPECIFIC INVOICE
     Route::get('invoice-private/{id}',[ApiInvoicePrivateController::class,'show']);
-    //GET ITEMS INVOICE
-
-    //GET ITEMS INVOICE
 
     //Logout User
     Route::get('logout', LogoutController::class);

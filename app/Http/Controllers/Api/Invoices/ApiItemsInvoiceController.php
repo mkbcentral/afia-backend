@@ -6,16 +6,13 @@ use App\Http\Actions\InvoiActions;
 use App\Http\Controllers\Controller;
 use App\Http\Repositories\Invoices\InvoiceItemsRepository;
 use App\Http\Repositories\Invoices\InvoicePrivateRepository;
-use App\Models\InvoicePrivate;
-use App\Models\InvoiceSubscribe;
-use App\Models\OtherInvoice;
-use App\Models\OtherInvoiceSubscribe;
+
 use Exception;
 use Illuminate\Http\Request;
 
 class ApiItemsInvoiceController extends Controller
 {
-
+    //Get items invoice
     public function getItemsInvoice($id){
         try {
             $items_invoice= (new InvoicePrivateRepository())->getInvoiceItem($id);
@@ -68,6 +65,7 @@ class ApiItemsInvoiceController extends Controller
             return response()->json(['errors' => $ex->getMessage()]);
         }
     }
+    //Delete item invoice
     public function deleteIvoiceItem(int $id){
         try {
             (new InvoicePrivateRepository())->deleteInvoiceItem($id,\request('table'));

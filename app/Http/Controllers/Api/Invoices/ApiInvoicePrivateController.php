@@ -10,17 +10,21 @@ use Illuminate\Http\Request;
 
 class ApiInvoicePrivateController extends Controller
 {
-    public function getInvoices(){
+    public function getInvoices()
+    {
+        //dd(request('date'));
         try {
-            $invoices=(new InvoicePrivateRepository())->get();
+            $invoices = (new InvoicePrivateRepository())
+                ->get(request('date'), request('month'), request('year'));
             return InvoicePrivateResource::collection($invoices);
         } catch (Exception $ex) {
             return response()->json(['errors' => $ex->getMessage()]);
         }
     }
-    public function show($id){
+    public function show($id)
+    {
         try {
-            $invoice=(new InvoicePrivateRepository())->show($id);
+            $invoice = (new InvoicePrivateRepository())->show($id);
             return new InvoicePrivateResource($invoice);
         } catch (Exception $ex) {
             return response()->json(['errors' => $ex->getMessage()]);
