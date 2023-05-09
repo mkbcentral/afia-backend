@@ -11,8 +11,8 @@ class InvoiceSubscribeRepository extends InvoiActions{
     {
         $invoices = InvoiceSubscribe::where('hospital_id', auth()->user()->hospital->id)
             ->where('branch_id',auth()->user()->branch->id)
-            ->whereMonth('created_at',date('m'))
-            ->orderBy('name', 'asc')
+            ->whereYear('created_at',date('Y'))
+            //->orderBy('patient_name', 'asc')
             ->get();
         return $invoices;
     }
