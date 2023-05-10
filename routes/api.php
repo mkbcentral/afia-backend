@@ -109,14 +109,18 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('other-invoice-subscribe/{id}/status-disable', [ApiOtherInvoiceSubscribeController::class, 'disablleStatus']);
 
     //Create items routes
-    Route::get('create-items-invoice-private/{id}',[ApiItemsInvoiceController::class,'createInvoiceItems']);
-    Route::put('update-qty-items-invoice/{id}',[ApiItemsInvoiceController::class,'updateQtyInvoiceItem']);
-    Route::delete('delete-item-invoice-private/{id}',[ApiItemsInvoiceController::class,'deleteIvoiceItem']);
-    Route::get('items-invoices-private/{id}',[ApiItemsInvoiceController::class,'getItemsInvoice']);
+    Route::get('create-item-invoice/{id}',[ApiItemsInvoiceController::class,'createInvoiceItems']);
+    //Update quantity of item invoice
+    Route::put('update-qty-item-invoice/{id}',[ApiItemsInvoiceController::class,'updateQtyInvoiceItem']);
+    //Delete item invoice
+    Route::delete('delete-item-invoice/{id}',[ApiItemsInvoiceController::class,'deleteIvoiceItem']);
+    //Get items invoice (private,subscribe)
+    Route::get('items-invoices-private/{id}',[ApiItemsInvoiceController::class,'getItemsInvoicePrivate']);
+    Route::get('items-invoices-subscribe/{id}',[ApiItemsInvoiceController::class,'getItemsInvoiceSubscribe']);
 
     //GET ALL INVOICE
     Route::get('invoices-private',[ApiInvoicePrivateController::class,'getInvoices']);
-    Route::get('invoices-subscribe',[ApiInvoiceSubscribeController::class,'getInvoices']);
+    Route::get('invoices-subscribe',[ApiInvoiceSubscribeController::class,'getItemsInvoiceSubscribe']);
     //GET SPECIFIC INVOICE
     Route::get('invoice-private/{id}',[ApiInvoicePrivateController::class,'show']);
 

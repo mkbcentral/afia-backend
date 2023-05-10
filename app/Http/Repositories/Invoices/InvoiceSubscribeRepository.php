@@ -39,4 +39,9 @@ class InvoiceSubscribeRepository extends InvoiActions{
             ->first();
         return $invoice;
     }
+
+    public function show(int $id): InvoiceSubscribe
+    {
+        return InvoiceSubscribe::find($id);
+    }
 }

@@ -3,8 +3,10 @@
 namespace App\Http\Actions;
 
 use App\Http\Resources\InvoicePrivateResource;
+use App\Models\AgentInvoice;
 use App\Models\CategoryTarification;
 use App\Models\InvoicePrivate;
+use App\Models\InvoiceSubscribe;
 use Illuminate\Support\Facades\DB;
 
 class InvoiActions
@@ -14,7 +16,7 @@ class InvoiActions
      *
      * @return Illuminate\Support\Facades\DB query
      *
-     * @param (string $tablename, array $dataInputs)
+     * @var (string $tablename, array $dataInputs)
      */
     public function createInvoiceLines(string $tableName, array $data)
     {
@@ -25,7 +27,7 @@ class InvoiActions
      *
      * @return Illuminate\Support\Facades\DB query
      *
-     * @param (int $id,string $tablename,init $qty)
+     * @var (int $id,string $tablename,init $qty)
      */
     public function udateItemInvoiceQty(int $id, string $tableName, int $qty)
     {
@@ -40,7 +42,7 @@ class InvoiActions
      *
      * @return Illuminate\Support\Facades\DB query
      *
-     * @param (int $id,string $tablename)
+     * @var (int $id,string $tablename)
      */
     public function deleteInvoiceItem($id, $tableName): void
     {
@@ -51,7 +53,7 @@ class InvoiActions
      *
      * @return Illuminate\Support\Facades\DB query
      *
-     * @param (string $tablename,string $columnNameTochek,string $invoiceId)
+     * @var (string $tablename,string $columnNameTochek,string $invoiceId)
      */
     public function checkIfItemExistOnInvoice(
         string $tableName,
@@ -66,7 +68,7 @@ class InvoiActions
      *
      * @return Illuminate\Support\Facades\DB query
      *
-     * @param (int $id,string $tablename)
+     * @var (int $id,string $tablename)
      */
     public function enableStatusInvoice($id, $tableName, $columnStatus): void
     {
@@ -81,7 +83,7 @@ class InvoiActions
      *
      * @return Illuminate\Support\Facades\DB query
      *
-     * @param (int $id,string $tablename)
+     * @var (int $id,string $tablename)
      */
     public function disableStatusInvoice($id, $tableName, $columnStatus): void
     {
@@ -91,10 +93,148 @@ class InvoiActions
                 $columnStatus => false
             ]);
     }
-
-    public function getInvoiceItem($id)
+    //Get items invoice private
+    public function getInvoiceItemPrivate($id)
     {
         $invoice = InvoicePrivate::find($id);
+        $consultation = $invoice->consultation;
+        $items_invoice = DB::table('invoice_private_tarification')->where('invoice_private_id', $invoice->id)
+            ->join(
+                'tarifications',
+                'tarifications.id',
+                '=',
+                'invoice_private_tarification.tarification_id'
+            )
+            ->join(
+                'category_tarifications',
+                'category_tarifications.id',
+                '=',
+                'tarifications.category_tarification_id'
+            )
+            ->select(
+                'category_tarifications.name as category',
+                'invoice_private_tarification.id',
+                'tarifications.name',
+                'tarifications.price_private',
+                'invoice_private_tarification.qty'
+            )
+            ->groupBy(
+                'category',
+                'invoice_private_tarification.id',
+                'tarifications.name',
+                'tarifications.price_private',
+                'invoice_private_tarification.qty'
+            )
+            ->get();
+        $groupedItems = [];
+        $total_invoice = 0;
+        foreach ($items_invoice as $item) {
+            $category = $item->category;
+            // Si la clé de catégorie n'existe pas encore dans le tableau, on l'initialise
+            if (!isset($groupedItems[$category])) {
+                $groupedItems[$category] = ['data' => []];
+            }
+            // Ajouter l'élément au tableau associatif pour cette catégorie
+            $groupedItems[$category]['data'][] = [
+                'id' => $item->id,
+                'name' => $item->name,
+                'qty' => $item->qty,
+                'price' => request('currency') == 'CDF'
+                    ? number_format($item->price_private * $invoice->rate->amount, 1, ',', ' ')
+                    : number_format($item->price_private, 1, ',', ' '),
+                'total' =>
+                request('currency') == 'CDF'
+                    ? number_format($item->price_private * $item->qty * $invoice->rate->amount, 1, ',', ' ')
+                    : number_format($item->price_private * $item->qty, 1, ',', ' ')
+            ];
+            $total_invoice += $item->price_private * $item->qty;
+        }
+        return [
+            'total_invoice' => request('currency') == 'CDF'
+                ? number_format(($total_invoice + $consultation->price_private) * $invoice->rate->amount, 1, ',', ' ')
+                : number_format($total_invoice + $consultation->price_private, 1, ',', ' '),
+            'consultation' => [
+                'name' => $consultation->name,
+                'amount' => request('currency') == 'CDF'
+                    ? number_format($consultation->price_private * $invoice->rate->amount, 1, ',', ' ')
+                    : number_format($consultation->price_private, 1, ',', ' ')
+            ],
+            'data' => $groupedItems,
+        ];
+    }
+    //Get items invoice subscribe
+    public function getInvoiceItemSubscribe($id)
+    {
+        $invoice = InvoiceSubscribe::find($id);
+        $consultation = $invoice->consultation;
+        $items_invoice = DB::table('invoice_subscribe_tarification')->where('invoice_subscribe_id', $invoice->id)
+            ->join(
+                'tarifications',
+                'tarifications.id',
+                '=',
+                'invoice_subscribe_tarification.tarification_id'
+            )
+            ->join(
+                'category_tarifications',
+                'category_tarifications.id',
+                '=',
+                'tarifications.category_tarification_id'
+            )
+            ->select(
+                'category_tarifications.name as category',
+                'invoice_subscribe_tarification.id',
+                'tarifications.name',
+                'tarifications.price_subscribe',
+                'invoice_subscribe_tarification.qty'
+            )
+            ->groupBy(
+                'category',
+                'invoice_subscribe_tarification.id',
+                'tarifications.name',
+                'tarifications.price_subscribe',
+                'invoice_subscribe_tarification.qty'
+            )
+            ->get();
+        $groupedItems = [];
+        $total_invoice = 0;
+        foreach ($items_invoice as $item) {
+            $category = $item->category;
+            // Si la clé de catégorie n'existe pas encore dans le tableau, on l'initialise
+            if (!isset($groupedItems[$category])) {
+                $groupedItems[$category] = ['data' => []];
+            }
+            // Ajouter l'élément au tableau associatif pour cette catégorie
+            $groupedItems[$category]['data'][] = [
+                'id' => $item->id,
+                'name' => $item->name,
+                'qty' => $item->qty,
+                'price' => request('currency') == 'CDF'
+                    ? number_format($item->price_subscribe * $invoice->rate->amount, 1, ',', ' ')
+                    : number_format($item->price_subscribe, 1, ',', ' '),
+                'total' =>
+                request('currency') == 'CDF'
+                    ? number_format($item->price_subscribe * $item->qty * $invoice->rate->amount, 1, ',', ' ')
+                    : number_format($item->price_subscribe * $item->qty, 1, ',', ' ')
+            ];
+            $total_invoice += $item->price_subscribe * $item->qty;
+        }
+        return [
+            'total_invoice' => request('currency') == 'CDF'
+                ? number_format(($total_invoice + $consultation->price_subscribe) * $invoice->rate->amount, 1, ',', ' ')
+                : number_format($total_invoice + $consultation->price_subscribe, 1, ',', ' '),
+            'consultation' => [
+                'name' => $consultation->name,
+                'amount' => request('currency') == 'CDF'
+                    ? number_format($consultation->price_subscribe * $invoice->rate->amount, 1, ',', ' ')
+                    : number_format($consultation->price_subscribe, 1, ',', ' ')
+            ],
+            'data' => $groupedItems,
+        ];
+    }
+    //Get items invoice agent
+    public function getAgentInvoiceItem($id)
+    {
+        $invoice = AgentInvoice::find($id);
         $consultation = $invoice->consultation;
         $items_invoice = DB::table('invoice_private_tarification')->where('invoice_private_id', $invoice->id)
             ->join(

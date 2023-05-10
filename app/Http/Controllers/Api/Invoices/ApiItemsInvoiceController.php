@@ -6,16 +6,28 @@ use App\Http\Actions\InvoiActions;
 use App\Http\Controllers\Controller;
 use App\Http\Repositories\Invoices\InvoiceItemsRepository;
 use App\Http\Repositories\Invoices\InvoicePrivateRepository;
-
+use App\Http\Repositories\Invoices\InvoiceSubscribeRepository;
 use Exception;
 use Illuminate\Http\Request;
 
 class ApiItemsInvoiceController extends Controller
 {
     //Get items invoice
-    public function getItemsInvoice($id){
+    public function getItemsInvoicePrivate($id){
         try {
-            $items_invoice= (new InvoicePrivateRepository())->getInvoiceItem($id);
+            $items_invoice= (new InvoicePrivateRepository())->getInvoiceItemPrivate($id);
+            $response = [
+                'items_invoice'=>$items_invoice
+            ];
+            return response()->json($response, 200);
+        } catch (Exception $ex) {
+            return response()->json(['errors' => $ex->getMessage()]);
+        }
+    }
+     //Get items invoice
+     public function getItemsInvoiceSubscribe($id){
+        try {
+            $items_invoice= (new InvoiceSubscribeRepository())->getInvoiceItemSubscribe($id);
             $response = [
                 'items_invoice'=>$items_invoice
             ];
